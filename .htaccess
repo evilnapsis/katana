@@ -1,0 +1,22 @@
+
+AddHandler application/x-httpd-php5 .php .html .htm 
+AddType application/x-httpd-php5 .html .htm
+
+
+AddType video/mp4  mp4 m4v
+AddType audio/mp4  m4a
+AddType video/ogg  ogv
+AddType audio/ogg  ogg oga
+AddType video/webm webm
+
+
+RewriteEngine On
+
+
+#RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?view=$1 [NC]
+RewriteRule ^productos-nuevos$ index.php?view=productos&opt=news [NC]
+RewriteRule ^paginas-web$ index.php?r=index/paginasweb [NC]
+RewriteRule ^contact$ index.php?r=index/contact [NC]
+RewriteRule ^sistema-cazuelitas$ index.php?r=index/sistemacazuelitas [NC]
+RewriteRule ^sistema-mekatab$ index.php?r=index/sistemamekatab [NC]
+
