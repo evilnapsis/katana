@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Katana - Sistema de Tienda en Linea</title>
+  <title>Katana Lite - Sistema de Tienda en Linea</title>
 
   <link rel="stylesheet" type="text/css" href="res/lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="res/lib/font-awesome/css/font-awesome.min.css">
@@ -17,7 +17,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-xs-5">
-      <br><h1>KATANA</h1>
+      <br><h1>KATANA LITE</h1>
       </div>
       <div class="col-md-7 col-xs-5">
 <br><br>
@@ -113,10 +113,10 @@ $client = ClientData::getById($_SESSION["client_id"]);
 <div class="row">
 <div class="col-md-12">
 <hr>
-<p><b>Katana</b> &copy; 2015</p>
+<p><b>Katana Lite</b> &copy; 2016</p>
 <ul class="list-inline">
-<li><p class="text-muted">An <a href="http://evilnapsis.com/">Evilnapsis</a> Production</p></li>
-<li><a href="http://evilnapsis.com/services/support/">Soporte</a></li>
+<li><p class="text-muted"> <a href="http://evilnapsis.com/">Evilnapsis</a></p></li>
+<li><p class="text-muted"> <a href="http://evilnapsis.com/support/katana-documentation/">Documentacion</a></p></li>
 </ul>
 </div>
 </div>

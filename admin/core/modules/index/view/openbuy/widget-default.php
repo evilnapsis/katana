@@ -3,11 +3,17 @@
 
 $buy = BuyData::getById($_GET["buy_id"]);
 $products = BuyProductData::getAllByBuyId($_GET["buy_id"]);
-
+$client = ClientData::getById($buy->client_id);
+$paymethod = $buy->getPaymethod();
+$iva = ConfigurationData::getByPreffix("general_iva")->val;
+$coin = ConfigurationData::getByPreffix("general_coin")->val;
+$ivatxt = ConfigurationData::getByPreffix("general_iva_txt")->val;
 ?>
 <div class="row">
 	<div class="col-md-12">
 	<h2> Compra #<?php echo $buy->id; ?> [<?php echo $buy->getStatus()->name; ?>]</h2>
+	<h4>Cliente: <?php echo $client->getFullname(); ?></h4>
+	<h4>Metodo de pago : <?php echo $paymethod->name; ?></h4>
 <?php if(count($products)>0):?>
 <table class="table table-bordered">
 	<thead>
@@ -20,10 +26,10 @@ $products = BuyProductData::getAllByBuyId($_GET["buy_id"]);
 $px = $p->getProduct();
 	?>
 	<tr>
-		<td><a href="index.php?view=producto&product_id=<?php echo $px->id; ?>">Detalles</a></td>
+		<td><a target="_blank" href="../index.php?view=producto&product_id=<?php echo $px->id; ?>">Detalles</a></td>
 		<td><?php echo $px->code; ?></td>
 		<td><?php echo $px->name; ?></td>
-		<td>$ <?php echo number_format($px->price*$p->q,2,".",","); ?></td>
+		<td><?php echo $coin; ?> <?php echo number_format($px->price*$p->q,2,".",","); ?></td>
 	</tr>
 
 	<?php endforeach; ?>
@@ -34,13 +40,13 @@ $px = $p->getProduct();
 <div class="col-md-5 col-md-offset-7">
 	<table class="table table-bordered">
 		<tr>
-			<td>Subtotal</td><td>$ <?php echo number_format($buy->getTotal()-($buy->getTotal()*.16),2,".",","); ?></td>
+			<td>Subtotal</td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal()-($buy->getTotal()*($iva/100)),2,".",","); ?></td>
 		</tr>
 		<tr>
-			<td>IVA</td><td>$ <?php echo number_format($buy->getTotal()*.16,2,".",","); ?></td>
+			<td><?php echo $ivatxt; ?></td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal()*($iva/100),2,".",","); ?></td>
 		</tr>
 		<tr>
-			<td>Total</td><td>$ <?php echo number_format($buy->getTotal(),2,".",","); ?></td>
+			<td>Total</td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal(),2,".",","); ?></td>
 		</tr>
 	</table>
 <br>
@@ -48,7 +54,7 @@ $px = $p->getProduct();
 </div>
 <div class="row">
 <div class="col-md-12">
-
+<!--
 <form class="form-horizontal" role="form" method="post" action="index.php?action=changestatus">
   <div class="form-group">
     <label for="inputEmail1" class="col-md-3 control-label">Estado</label>
@@ -68,7 +74,7 @@ $px = $p->getProduct();
 
   </div>
 </form>
-
+-->
 
 </div>
 </div>

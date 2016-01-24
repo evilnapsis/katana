@@ -51,14 +51,17 @@
 						<i class="glyphicon glyphicon-ok"></i>
 					<?php endif; ?>
 				</td>
-				<td style="width:30px;"><a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a></td>
+				<td style="width:120px;">
+				<a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
+				<a href="index.php?action=deluser&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a></td>
+				</td>
 				</tr>
 				<?php
 
 			}
-
-
-
+			?>
+			</table>
+			<?php
 		}else{
 			// no hay usuarios
 		}

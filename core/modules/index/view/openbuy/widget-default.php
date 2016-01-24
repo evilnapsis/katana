@@ -1,6 +1,9 @@
 <?php if(isset($_SESSION["client_id"])):
-
 $client = ClientData::getById($_SESSION["client_id"]);
+$iva = ConfigurationData::getByPreffix("general_iva")->val;
+$coin = ConfigurationData::getByPreffix("general_coin")->val;
+$ivatxt = ConfigurationData::getByPreffix("general_iva_txt")->val;
+
 ?>
 
 <?php
@@ -51,7 +54,7 @@ $px = $p->getProduct();
 		<td><?php echo $px->getUnit()->name; ?></td>
 		<td><?php echo $px->code; ?></td>
 		<td><?php echo $px->name; ?></td>
-		<td>$ <?php echo number_format($px->price*$p->q,2,".",","); ?></td>
+		<td><?php echo $coin; ?> <?php echo number_format($px->price*$p->q,2,".",","); ?></td>
 	</tr>
 
 	<?php endforeach; ?>
@@ -62,13 +65,13 @@ $px = $p->getProduct();
 <div class="col-md-5 col-md-offset-7">
 	<table class="table table-bordered">
 		<tr>
-			<td>Subtotal</td><td>$ <?php echo number_format($buy->getTotal()-($buy->getTotal()*.16),2,".",","); ?></td>
+			<td>Subtotal</td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal()-($buy->getTotal()*($iva/100)),2,".",","); ?></td>
 		</tr>
 		<tr>
-			<td>IVA</td><td>$ <?php echo number_format($buy->getTotal()*.16,2,".",","); ?></td>
+			<td><?php echo $ivatxt; ?></td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal()*($iva/100),2,".",","); ?></td>
 		</tr>
 		<tr>
-			<td>Total</td><td>$ <?php echo number_format($buy->getTotal(),2,".",","); ?></td>
+			<td>Total</td><td><?php echo $coin; ?> <?php echo number_format($buy->getTotal(),2,".",","); ?></td>
 		</tr>
 	</table>
 <br>

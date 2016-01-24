@@ -1,8 +1,13 @@
 <?php
 
-$buy =  BuyData::getById($_POST["buy_id"]);
-$buy->status_id = $_POST["status_id"];
+if(isset($_SESSION["admin_id"])){
+
+$buy =  BuyData::getById($_GET["id"]);
+$buy->status_id = $_GET["status"];
 $buy->change_status();
 
-Core::redir("index.php?view=openbuy&buy_id=".$_POST["buy_id"]);
+
+
+Core::redir("index.php?view=sells");
+}
 ?>

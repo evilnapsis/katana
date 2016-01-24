@@ -1,3 +1,6 @@
+<?php 
+$coin = ConfigurationData::getByPreffix("general_coin")->val;
+?>
         <!-- Main Content -->
 
           <div class="row">
@@ -39,7 +42,7 @@
     <label for="inputEmail1" class="col-lg-2 control-label">Precio</label>
     <div class="col-lg-10">
       <div class="input-group">
-  <span class="input-group-addon">$</span>
+  <span class="input-group-addon"><?php echo $coin; ?></span>
   <input type="text" class="form-control" placeholder="Precio" required name="price">
 </div>    </div>
   </div>

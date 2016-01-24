@@ -17,13 +17,12 @@
                   <i class="fa fa-th-list"></i> Productos
                 </div>
                 <div class="widget-body medium no-padding">
-
-                  <div class="table-responsive">
-                    <table class="table table-bordered">
-                      <tbody>
 <?php
 $categories = ProductData::getAll();
  if(count($categories)>0):?>
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <tbody>
 <thead>
   <th>Nombre</th>
   <th>Visible</th>
@@ -37,16 +36,22 @@ $categories = ProductData::getAll();
                         <td style="width:90px;"><center><?php if($cat->is_public):?><i class="fa fa-check"></i><?php else: ?><i class="fa fa-remove"></i><?php endif; ?></center> </td>
                         <td style="width:90px;"><center><?php if($cat->is_featured):?><i class="fa fa-check"></i><?php else: ?><i class="fa fa-remove"></i><?php endif; ?></center> </td>
                         <td style="width:90px;"><center><?php if($cat->in_existence):?><i class="fa fa-check"></i><?php else: ?><i class="fa fa-remove"></i><?php endif; ?></center> </td>
-                        <td style="width:90px;">
+                        <td style="width:105px;">
+                        <a href="../index.php?view=producto&product_id=<?php echo $cat->id; ?>" target="_blank" class="btn btn-default btn-xs"><i class="fa fa-link"></i></a> 
                         <a href="index.php?view=editproduct&product_id=<?php echo $cat->id; ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a> 
                         <a href="index.php?action=delproduct&product_id=<?php echo $cat->id; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a> 
                         </td>
                         </tr>
 <?php endforeach; ?>
- <?php endif; ?>
                       </tbody>
                     </table>
                   </div>
+<?php else:?>
+  <div class="panel-body">
+  <p class="alert alert-warning">No hay productos, puedes empezar agregando tu lista de productos.</p>
+  </div>
+ <?php endif; ?>
+
                 </div>
               </div>
             </div>

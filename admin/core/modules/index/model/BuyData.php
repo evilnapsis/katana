@@ -14,10 +14,11 @@ class BuyData {
 
 	public function getStatus(){ return StatusData::getById($this->status_id);}
 	public function getClient(){ return ClientData::getById($this->client_id);}
+	public function getPaymethod(){ return PaymethodData::getById($this->paymethod_id);}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (code,client_id,created_at,status_id) ";
-		$sql .= "value (\"$this->code\",\"$this->client_id\",$this->created_at,$this->status_id)";
+		$sql = "insert into ".self::$tablename." (k,code,coupon_id,client_id,created_at,paymethod_id,status_id) ";
+		$sql .= "value (\"$this->k\",\"$this->code\",$this->coupon_id,\"$this->client_id\",$this->created_at,$this->paymethod_id,$this->status_id)";
 		return Executor::doit($sql);
 	}
 
@@ -37,7 +38,7 @@ class BuyData {
 	}
 
 	public function cancel(){
-		$sql = "update ".self::$tablename." set status_id=5 where id=$this->id";
+		$sql = "update ".self::$tablename." set status_id=3 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -53,6 +54,13 @@ class BuyData {
 		return Model::one($query[0],new BuyData());
 	}
 
+	public static function countByStatusId($id){
+		$sql = "select count(*) as c from ".self::$tablename." where status_id=$id";
+		$query = Executor::doit($sql);
+		return Model::one($query[0],new BuyData());
+	}
+
+
 	public static function getByCode($id){
 		$sql = "select * from ".self::$tablename." where code=\"$id\"";
 		$query = Executor::doit($sql);
@@ -67,10 +75,23 @@ class BuyData {
 
 
 	public static function getAll(){
-		$sql = "select * from ".self::$tablename;
+		$sql = "select * from ".self::$tablename." order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new BuyData());
 	}
+
+	public static function getAllByDate($date){
+		$sql = "select * from ".self::$tablename." where date(created_at)=\"$date\"";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new BuyData());
+	}
+
+	public static function getByRange($start,$end){
+		$sql = "select * from ".self::$tablename." where (created_at>=\"$start\" and created_at<=\"$end\") order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new BuyData());
+	}
+
 
 	public  function getTotal(){
 		$products = BuyProductData::getAllByBuyId($this->id);
@@ -84,7 +105,7 @@ class BuyData {
 
 
 	public static function getAllByClientId($id){
-		$sql = "select * from ".self::$tablename." where client_id=$id";
+		$sql = "select * from ".self::$tablename." where client_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new BuyData());
 	}

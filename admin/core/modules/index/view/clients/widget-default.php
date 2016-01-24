@@ -4,7 +4,7 @@
             <div class="col-md-12">
   <!-- Button trigger modal -->
 
-
+<a href="./?view=newclient" class="btn btn-default pull-right">Nuevo Cliente</a>
             <h2>CLIENTES</h2>
             </div>
             </div>
@@ -16,13 +16,13 @@
                   <i class="fa fa-th-list"></i> Clientes
                 </div>
                 <div class="widget-body medium no-padding">
-
-                  <div class="table-responsive">
-                    <table class="table table-bordered">
-                      <tbody>
 <?php
 $categories = ClientData::getAll();
  if(count($categories)>0):?>
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <tbody>
+
 <thead>
   <th>Nombre</th>
   <th>Email</th>
@@ -31,18 +31,24 @@ $categories = ClientData::getAll();
 </thead>
 <?php foreach($categories as $cat):?>
                         <tr>
-                        <td><?php echo $cat->name; ?></td>
+                        <td><?php echo $cat->getFullname(); ?></td>
                         <td><?php echo $cat->email; ?></td>
                         <td style="width:90px;">
-                        <a href="index.php?view=editproduct&product_id=<?php echo $cat->id; ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a> 
+                        <a href="index.php?view=editclient&client_id=<?php echo $cat->id; ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a> 
                         <a href="index.php?action=delclient&client_id=<?php echo $cat->id; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a> 
                         </td>
                         </tr>
 <?php endforeach; ?>
- <?php endif; ?>
+
                       </tbody>
                     </table>
-                  </div>
+                  </div> 
+
+<?php else:?>
+  <div class="panel-body">
+  <p class="alert alert-warning">No hay clientes por mostrar, agregar uno o espera a que se registren.</p>
+  </div>
+<?php endif; ?>
                 </div>
               </div>
             </div>

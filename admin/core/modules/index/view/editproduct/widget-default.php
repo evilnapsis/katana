@@ -1,7 +1,9 @@
 <?php
 $product = ProductData::getById($_GET["product_id"]);
 $url = "storage/products/$product->image";
+$coin = ConfigurationData::getByPreffix("general_coin")->val;
 ?>
+
         <!-- Main Content -->
 
           <div class="row">
@@ -47,7 +49,7 @@ $url = "storage/products/$product->image";
     <label for="inputEmail1" class="col-lg-2 control-label">Precio</label>
     <div class="col-lg-10">
       <div class="input-group">
-  <span class="input-group-addon">$</span>
+  <span class="input-group-addon"><?php echo $coin; ?></span>
   <input type="text" class="form-control" placeholder="Precio" value="<?php echo $product->price; ?>" required name="price">
 </div>    </div>
   </div>
@@ -121,7 +123,7 @@ $categories = CategoryData::getAll();
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-6">
-      <button type="submit" class="btn btn-success btn-block">Editar Producto</button>
+      <button type="submit" class="btn btn-success btn-block">Actualizar Producto</button>
     </div>
     <div class="col-lg-4">
       <button type="reset" class="btn btn-default btn-block">Limpiar Campos</button>

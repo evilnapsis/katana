@@ -19,11 +19,11 @@ $url = "storage/slides/$product->image";
             </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="widget">
-                <div class="widget-title">
+              <div class="panel panel-default">
+                <div class="panel-heading">
                   <i class="fa fa-pencil"></i> Editar Slide
                 </div>
-                <div class="widget-body ">
+                <div class="panel-body ">
 <form class="form-horizontal" role="form" enctype="multipart/form-data" method="post" action="index.php?action=updateslide">
   <div class="form-group">
    

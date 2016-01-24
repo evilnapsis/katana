@@ -1,5 +1,8 @@
 <?php 
 $p = ProductData::getById($_GET["product_id"]);
+$img_default = ConfigurationData::getByPreffix("general_img_default")->val;
+$coin_symbol = ConfigurationData::getByPreffix("general_coin")->val;
+
 Viewer::addView($p->id,"product_id","product_view");
 
  ?>
@@ -29,6 +32,9 @@ $cats = CategoryData::getPublics();
 <br>
 <?php if($p!=null):
 $img = "admin/storage/products/".$p->image;
+if($p->image==""){
+  $img=$img_default;
+}
 ?>
   <div class="row">
   <div class="col-md-8">
@@ -36,7 +42,7 @@ $img = "admin/storage/products/".$p->image;
 
   </div>
   <div class="col-md-4">
-<h1 class="text-primary">$ <?php echo number_format($p->price,2,".",","); ?></h1>
+<h1 class="text-primary"><?php echo $coin_symbol; ?> <?php echo number_format($p->price,2,".",","); ?></h1>
 <?php 
 $in_cart=false;
 if(isset($_SESSION["cart"])){

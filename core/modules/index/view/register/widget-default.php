@@ -10,15 +10,15 @@
 				<div class="panel-body">
 <form class="form-horizontal" role="form" method="post" action="index.php?action=register">
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Nombre</label>
+    <label for="inputEmail1" class="col-lg-2 control-label">*Nombre</label>
     <div class="col-lg-10">
-      <input type="text" name="name" class="form-control" id="inputEmail1" placeholder="Nombre">
+      <input type="text" required name="name" class="form-control" id="inputEmail1" placeholder="Nombre">
     </div>
   </div>
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Apellido</label>
+    <label for="inputEmail1" class="col-lg-2 control-label">*Apellido</label>
     <div class="col-lg-10">
-      <input type="text" name="lastname" class="form-control" id="inputEmail1" placeholder="Apellido">
+      <input type="text" required name="lastname" class="form-control" id="inputEmail1" placeholder="Apellido">
     </div>
   </div>
   <div class="form-group">
@@ -35,24 +35,17 @@
   </div>
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Correo Electronico</label>
+    <label for="inputEmail1" class="col-lg-2 control-label">*Correo Electronico</label>
     <div class="col-lg-10">
-      <input type="email" name="email" class="form-control" id="inputEmail1" placeholder="Correo Electronico">
+      <input type="email" name="email" required class="form-control" id="inputEmail1" placeholder="Correo Electronico">
     </div>
   </div>
   <div class="form-group">
-    <label for="inputPassword1" class="col-lg-2 control-label">Contrase&ntilde;a</label>
+    <label for="inputPassword1" class="col-lg-2 control-label">*Contrase&ntilde;a</label>
     <div class="col-lg-10">
-      <input type="password" name="password" class="form-control" id="inputPassword1" placeholder="Contrase&ntilde;a">
+      <input type="password" required name="password" class="form-control" id="inputPassword1" placeholder="Contrase&ntilde;a">
     </div>
   </div>
-  <div class="form-group">
-    <label for="inputPassword1" class="col-lg-2 control-label">Confirmar Contrase&ntilde;a</label>
-    <div class="col-lg-10">
-      <input type="password" name="confirm_password" class="form-control" id="inputPassword1" placeholder="Confirmar Contrase&ntilde;a">
-    </div>
-  </div>
-
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
       <div class="checkbox">
@@ -68,6 +61,7 @@
     </div>
   </div>
 </form>
+      <p class="text-muted">* Campos obligatorios</p>
 				</div>
 			</div>
 		</div>

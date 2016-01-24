@@ -5,6 +5,7 @@ include "admin/core/modules/index/model/BuyProductData.php";
 include "admin/core/modules/index/model/ProductData.php";
 include "admin/core/modules/index/model/ClientData.php";
 include "admin/core/modules/index/model/UnitData.php";
+include "admin/core/modules/index/model/ConfigurationData.php";
 
 require('fpdf/fpdf.php');
 
@@ -21,6 +22,7 @@ function LoadData($file)
 }
 
 function Header(){
+$title = ConfigurationData::getByPreffix("general_main_title")->val;
     $service = BuyData::getByCode($_GET["code"]);
         $this->SetFont('Arial','B',15);
         $this->setX(20);
@@ -32,7 +34,7 @@ function Header(){
 // $this->Line(20, 262.5, 200, 262.5); // 20mm from each edge
 
         $this->SetFont('Arial','B',20);
-        $this->Cell( 40, 40, "KATANA", 0, 0, 'L', false );
+        $this->Cell( 40, 40, $title, 0, 0, 'L', false );
 
         $this->Ln();
         $this->setY(7);
@@ -43,6 +45,10 @@ function Header(){
 // Tabla simple
 function ImprovedTable($data)
 {
+$iva = ConfigurationData::getByPreffix("general_iva")->val;
+$iva_txt = ConfigurationData::getByPreffix("general_iva_txt")->val;
+$coin = ConfigurationData::getByPreffix("general_coin")->val;
+
     $service = BuyData::getByCode($_GET["code"]);
 $products = BuyProductData::getAllByBuyId($service->id);
    $client = ClientData::getById($service->client_id);
@@ -59,7 +65,7 @@ $products = BuyProductData::getAllByBuyId($service->id);
 //         $this->Cell(0,35,"",1);
         $this->setY(38);
         $this->setX(20);
-        $this->Cell(0,10," NOMBRE:        ".$client->name);
+        $this->Cell(0,10," NOMBRE:        ".$client->getFullname());
         $this->setY(43);
         $this->setX(20);
         $this->Cell(0,10," DIRECCION:        ".$client->address);
@@ -105,7 +111,7 @@ if(count($products)){
          $this->setX(50);
          $this->Cell(0,10,strtoupper($item->name));
          $this->setX(180);
-         $this->Cell(0,10,"$ ".number_format($item->price,2,".",","));
+         $this->Cell(0,10,utf8_decode($coin)." ".number_format($item->price,2,".",","));
          $total +=$itemx->q*$item->price;
  
          $this->setY(95+$starty);
@@ -113,53 +119,20 @@ if(count($products)){
          $starty+=5;
     }
 }
-////////////////////////
-//////////////////////// materiales
-/*if(count($subworks)){
-         $this->setX(20);
-         $this->Cell(0,(count($subworks)*5)+10,"",1);
-         $this->setY(95+$starty);
-         $this->setX(20);
-         $this->Cell(0,10,strtoupper("**MATERIALES"));
-         $starty+=5;
-    foreach($subworks as $item){
-        $mtx=null;
-        foreach($mts as $mt){ if($mt->material_id==$item->id){ $mtx = $mt; }}
-        if($mtx!=null&& $mtx->material_id==$item->id){
-            
-         $this->setY(95+$starty);
-         $this->setX(20);
-         $this->Cell(0,10,strtoupper($item->name));
-         $this->setX(180);
-         $this->Cell(0,10,"$ ".number_format($item->price,2,".",","));
-         $this->setY(95+$starty);
-         $this->setX(65);
-         $starty+=5;
-
-        }
-
-    }
-}
-*/
-////////////////////////
-
-//         $this->Cell(0,10,"|X|__| ");
-//         $this->Cell(0,10,"|__|X| ");    
-
          $starty+=5;
 ///////////////////////////////////////////////////////////// Total
         $this->SetFont('Arial','',12);
          $this->setY(125+$starty);
          $this->setX(20);
-         $this->Cell(0,10,"SubTotal:          $ ".number_format($total*.84,2,".",","));
+         $this->Cell(0,10,"SubTotal:          ".utf8_decode($coin). " ".number_format($total*(1-($iva/100)),2,".",","));
          $starty+=5;
          $this->setY(125+$starty);
          $this->setX(20);
-         $this->Cell(0,10,"IVA:                   $ ".number_format($total*.16,2,".",","));
+         $this->Cell(0,10,"$iva_txt:                   ".utf8_decode($coin). " ".number_format($total*($iva/100),2,".",","));
          $starty+=5;
          $this->setY(125+$starty);
          $this->setX(20);
-         $this->Cell(0,10,"Total:                 $ ".number_format($total,2,".",","));
+         $this->Cell(0,10,"Total:                 ".utf8_decode($coin). " ".number_format($total,2,".",","));
 
 /////////////////////////////////////////////////////////////
 

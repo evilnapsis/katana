@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>.: Katana v1.0 :.</title>
+    <title>.: Admin Katana Lite v2 :.</title>
 
     <!-- Bootstrap core CSS -->
     <link href="res/bootstrap3/css/bootstrap.css" rel="stylesheet">
@@ -13,7 +13,13 @@
     <!-- Add custom CSS here -->
     <link href="../res/lib/sb-admin.css" rel="stylesheet">
     <link rel="stylesheet" href="../res/lib/font-awesome/css/font-awesome.min.css">
-    <script src="js/jquery-1.10.2.js"></script>
+  <script src="res/jquery.min.js"></script>
+
+<script src="res/morris/raphael-min.js"></script>
+<script src="res/morris/morris.js"></script>
+  <link rel="stylesheet" href="res/morris/morris.css">
+  <link rel="stylesheet" href="res/morris/example.css">
+
   </head>
 
   <body>
@@ -30,7 +36,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./">KATANA <sup><small><span class="label label-primary">v1.0</span></small></sup> </a>
+          <a class="navbar-brand" href="./">KATANA LITE <sup><small><span class="label label-primary">v2</span></small></sup> </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -41,27 +47,22 @@ if(isset($_SESSION["admin_id"]) && $_SESSION["admin_id"]!=""):
   $u = UserData::getById($_SESSION["admin_id"]);
 ?>
          <ul class="nav navbar-nav">
-          <li><a href="../"><i class="fa fa-globe"></i> Ver tienda</a></li>
+          <li><a href="../" target="_blank"><i class="fa fa-globe"></i> Ver tienda</a></li>
           </ul> 
           <ul class="nav navbar-nav side-nav">
           <li><a href="./"><i class="fa fa-home"></i> Inicio</a></li>
           <li><a href="index.php?view=products"><i class="fa fa-glass"></i> Productos</a></li>
           <li><a href="index.php?view=sells"><i class="fa fa-shopping-cart"></i> Ventas</a></li>
+          <li><a href="index.php?view=sellreport"><i class="fa fa-area-chart"></i> Reportes</a></li>
           <li><a href="index.php?view=clients"><i class="fa fa-male"></i> Clientes</a></li>
           <li><a href="index.php?view=categories"><i class="fa fa-th-list"></i> Categorias</a></li>
           <li><a href="index.php?view=slider"><i class="fa fa-th-large"></i> Slider</a></li>
           <?php if($u->is_admin):?>
+          <li><a href="index.php?view=settings"><i class="fa fa-wrench"></i> Ajustes</a></li>
           <li><a href="index.php?view=users"><i class="fa fa-users"></i> Usuarios </a></li>
         <?php endif;?>
           </ul>
-
-
-
-
 <?php endif;?>
-
-
-
 <?php if(isset($_SESSION["admin_id"]) && $_SESSION["admin_id"]!=""):?>
 <?php 
 $u=null;
@@ -71,6 +72,8 @@ if($_SESSION["admin_id"]!=""){
 
   }?>
           <ul class="nav navbar-nav navbar-right navbar-user">
+
+
             <li class="dropdown user-dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <?php echo $user; ?> <b class="caret"></b>
@@ -78,6 +81,8 @@ if($_SESSION["admin_id"]!=""){
         <ul class="dropdown-menu">
           <li><a href="index.php?view=configuration">Configuracion</a></li>
           <li><a href="logout.php">Salir</a></li>
+        </ul>
+        </li>
         </ul>
 <?php else:?>
 <?php endif; ?>
