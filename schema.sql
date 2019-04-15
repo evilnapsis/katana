@@ -7,14 +7,14 @@ use katanalite;
 
 create table user(
 	id int not null auto_increment primary key,
-	name varchar(50) not null,
-	lastname varchar(50) not null,
+	name varchar(50),
+	lastname varchar(50),
 	username varchar(50),
-	email varchar(255) not null,
-	password varchar(60) not null,
-	is_active boolean not null default 1,
-	is_admin boolean not null default 0,
-	created_at datetime not null
+	email varchar(255),
+	password varchar(60),
+	is_active boolean default 1,
+	is_admin boolean default 0,
+	created_at datetime
 );
 
 
@@ -46,33 +46,33 @@ insert into unit (name) value ("Caja");
 
 create table category (
 	id int not null auto_increment primary key,
-	name varchar(200) not null,
-	short_name varchar(200) not null,
-	in_home boolean not null default 0,
-	in_menu boolean not null default 0,
-	is_active boolean not null default 0
+	name varchar(200),
+	short_name varchar(200),
+	in_home boolean default 0,
+	in_menu boolean default 0,
+	is_active boolean default 0
 );
 
-insert into category (name,is_active) value ("Basico",1);
+insert into category (name,short_name,is_active) value ("Basico","basico",1);
 
 
 create table product (
 	id int not null auto_increment primary key,
-	short_name varchar(20) not null,
-	name varchar(200) not null,
-	code varchar(200) not null,
-	description varchar(1000) not null,
-	offer_txt varchar(1000) not null,
+	short_name varchar(20) ,
+	name varchar(200) ,
+	code varchar(200) ,
+	description varchar(1000) ,
+	offer_txt varchar(1000) ,
 	image varchar(255),	
 	link varchar(255),	
-	is_featured boolean not null default 0,
-	is_public boolean not null default 0,
-	in_existence boolean not null default 0,
-	created_at datetime not null,
-	order_at datetime not null,
-	price float not null,
-	category_id int not null,
-	unit_id int not null,
+	is_featured boolean  default 0,
+	is_public boolean  default 0,
+	in_existence boolean  default 0,
+	created_at datetime ,
+	order_at datetime ,
+	price float ,
+	category_id int ,
+	unit_id int ,
 	/** for SEO **/
 	meta_title varchar(100),
 	meta_description varchar(255),
@@ -93,16 +93,16 @@ create table product (
 
 create table coupon (
 	id int not null auto_increment primary key,
-	name varchar(200) not null,
-	description varchar(1000) not null,
+	name varchar(200),
+	description varchar(1000),
 	product_id int,
 	val double,
-	kind int not null default 1, /** 1.- precio, 2.- porcentaje **/
-	is_multiple boolean not null default 0,
-	is_active boolean not null default 1,
-	start_at date not null,
-	finish_at date not null,
-	created_at datetime not null,
+	kind int default 1, /** 1.- precio, 2.- porcentaje **/
+	is_multiple boolean default 0,
+	is_active boolean default 1,
+	start_at date,
+	finish_at date,
+	created_at datetime,
 	foreign key(product_id) references product(id)
 );
 
@@ -110,30 +110,30 @@ create table coupon (
 create table product_view(
 	id int not null auto_increment primary key,
 	viewer_id int,
-	product_id int null,
-	created_at datetime not null,
-	realip varchar(16) not null,
+	product_id int,
+	created_at datetime,
+	realip varchar(16),
 	foreign key (viewer_id) references user(id),
 	foreign key (product_id) references product(id)
 );
 
 create table client (
 	id int not null auto_increment primary key,
-	name varchar(50) not null,
-	lastname varchar(50) not null,
-	email varchar(255) not null,
-	phone varchar(255) not null,
-	address varchar(255) not null,
-	password varchar(60) not null,
-	is_active boolean not null default 1,
-	created_at datetime not null
+	name varchar(50),
+	lastname varchar(50),
+	email varchar(255),
+	phone varchar(255),
+	address varchar(255),
+	password varchar(60),
+	is_active boolean default 1,
+	created_at datetime
 );
 
 create table paymethod(
 	id int not null auto_increment primary key,
 	short_name varchar(100),
-	name varchar(200) not null,
-	is_active boolean not null default 0	
+	name varchar(200),
+	is_active boolean default 0	
 );
 
 insert into paymethod(short_name,name) value ("bank", "Deposito Bancario"),("deliver", "Pago Contra entrega");
@@ -141,7 +141,7 @@ insert into paymethod(short_name,name) value ("bank", "Deposito Bancario"),("del
 
 create table status (
 	id int not null auto_increment primary key,
-	name varchar(200) not null
+	name varchar(200)
 );
 
 insert into status (name) value ("Pendiente");
@@ -155,13 +155,13 @@ insert into status (name) value ("Finalizado");
 
 create table buy (
 	id int not null auto_increment primary key,
-	k varchar(20) not null,
-	code varchar(20) not null,
-	client_id int not null,
+	k varchar(20),
+	code varchar(20),
+	client_id int,
 	coupon_id int,
-	status_id int not null,
-	created_at datetime not null,
-	paymethod_id int not null,
+	status_id int,
+	created_at datetime,
+	paymethod_id int,
 	foreign key(paymethod_id) references paymethod(id),
 	foreign key(coupon_id) references coupon(id),
 	foreign key(client_id) references client(id),
@@ -170,9 +170,9 @@ create table buy (
 
 create table buy_product(
 	id int not null auto_increment primary key,
-	buy_id int not null,
-	product_id int not null,
-	q int not null,
+	buy_id int,
+	product_id int,
+	q int,
 	foreign key(buy_id) references buy(id),
 	foreign key(product_id) references product(id)
 );
@@ -180,11 +180,11 @@ create table buy_product(
 
 create table slide (
 	id int not null auto_increment primary key,
-	title varchar(200) not null,
+	title varchar(200),
 	image varchar(255),	
-	is_public boolean not null default 0,
-	position int not null,
-	created_at datetime not null
+	is_public boolean default 0,
+	position int,
+	created_at datetime
 );
 /**
 kind:
@@ -198,7 +198,7 @@ kind:
 create table configuration(
 	id int not null auto_increment primary key,
 	name varchar(100) not null unique,
-	label varchar(200) not null,
+	label varchar(200),
 	kind int,
 	val text,
 	cfg_id int default 1

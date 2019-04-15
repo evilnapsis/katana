@@ -54,14 +54,14 @@ if(isset($_SESSION["cart"])){
   ?>
 <?php if(!$p->in_existence):?>
 <a href="javascript:void()" class="btn btn-labeled btn-warning tip" title="No Disponible">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>No Disponible</a>
+                <span><i class="fa fa-shopping-cart"></i></span> No Disponible</a>
 
 <?php elseif(!$in_cart):?>
 <a href="index.php?action=addtocart&product_id=<?php echo $p->id; ?>&href=product" class="btn btn-labeled btn-primary tip" title="A&ntilde;adir al carrito">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>Comprar</a>
+                <span><i class="fa fa-shopping-cart"></i></span> Comprar</a>
 <?php else:?>
 <a href="index.php?action=addtocart&product_id=<?php echo $p->id; ?>&href=product" class="btn btn-labeled btn-success tip" title="Ya esta en el carrito">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>Ya esta agregado</a>
+                <span><i class="fa fa-shopping-cart"></i></span> Ya esta agregado</a>
 
 <?php endif; ?>    
     <?php if($p->in_existence):?>

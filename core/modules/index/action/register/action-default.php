@@ -8,7 +8,7 @@ $client->name = $_POST["name"];
 $client->lastname = $_POST["lastname"];
 $client->email = $_POST["email"];
 $client->address = $_POST["address"];
-$client->password = crypt($_POST["password"]);
+$client->password = sha1(md5($_POST["password"]));
 $client->phone = $_POST["phone"];
 $client->add();
 
@@ -36,7 +36,7 @@ $client->add();
 						$address = clean_input_4email($_POST["address"]);
 						$phone = clean_input_4email($_POST["phone"]);
 //						$message = clean_input_4email($_POST["message"], false);
-$adminemail = ConfigurationData::getByPreffix("general_main_email");
+$adminemail = ConfigurationData::getByPreffix("general_main_email")->val;
 $replyemail = $adminemail;
 $success_sent_msg='
 <body style="background:#2b2b2b; text-align:center; margin-top:40px">

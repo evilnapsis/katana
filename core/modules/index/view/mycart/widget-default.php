@@ -51,7 +51,7 @@ foreach($_SESSION["cart"] as $s):?>
 </td>
 <td><h4><?php echo $coin_symbol; ?> <?php echo $p->price; ?></h4> </td>
 <td><h4><?php echo $coin_symbol; ?> <?php echo $p->price*$s["q"]; ?></h4> </td>
-<td style="width:30px;"><a href="index.php?action=deletefromcart&product_id=<?php echo $p->id; ?>&href=cart" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a></td>
+<td style="width:30px;"><a href="index.php?action=deletefromcart&product_id=<?php echo $p->id; ?>&href=cart" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
 <?php
 $total += $s["q"]*$p->price;
  endforeach; ?>

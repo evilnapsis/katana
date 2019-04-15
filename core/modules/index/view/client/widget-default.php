@@ -38,7 +38,7 @@ $buys = BuyData::getAllByClientid($_SESSION["client_id"]);
 	$discount = 0;
 	?>
 	<tr>
-		<td><a href="index.php?view=openbuy&code=<?php echo $buy->code; ?>" class="btn btn-default btn-xs">Detalles</a></td>
+		<td><a href="index.php?view=openbuy&code=<?php echo $buy->code; ?>" class="btn btn-secondary btn-sm">Detalles</a></td>
 		<td>#<?php echo $buy->id; ?></td>
 		<td><?php echo $coin_symbol; ?> <?php echo number_format($buy->getTotal(),2,".",","); ?></td>
 		<td><?php echo $coin_symbol; ?>

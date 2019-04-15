@@ -48,10 +48,10 @@ $url = "admin/storage/slides/".$s->image;
 
       <!-- Controls -->
       <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="fa fa-chevron-left"></span>
       </a>
       <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="fa fa-chevron-right"></span>
       </a>
     </div>
     <br>
@@ -101,18 +101,18 @@ if(isset($_SESSION["cart"])){
 <?php
  if(!$p->in_existence):?>
 
-<a href="javascript:void()" class="btn btn-labeled btn-sm btn-warning tip" title="No disponible">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>No Disponible</a>
+<a href="javascript:void()" class="btn btn-labeled btn-warning tip" title="No disponible">
+                <span ><i class="fa fa-shopping-cart"></i></span> No Disponible</a>
 <br>
 
 <?php elseif(!$in_cart):?>
 
-<a href="index.php?action=addtocart&product_id=<?php echo $p->id; ?>&href=cat" class="btn btn-labeled btn-sm btn-primary tip" title="A&ntilde;adir al carrito">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>Comprar</a>
+<a href="index.php?action=addtocart&product_id=<?php echo $p->id; ?>&href=cat" class="btn btn-labeled btn-primary tip" title="A&ntilde;adir al carrito">
+                <span class=""><i class="fa fa-shopping-cart"></i></span> Comprar</a>
 <br>
 <?php else:?>
-<center><a href="javascript:void()" class="btn btn-labeled btn-sm btn-success tip" title="Ya esta en el carrito">
-                <span class="btn-label"><i class="glyphicon glyphicon-shopping-cart"></i></span>Ya esta agregado</a>
+<center><a href="javascript:void()" class="btn btn-labeled btn-success tip" title="Ya esta en el carrito">
+                <span ><i class="fa fa-shopping-cart"></i></span> Ya esta agregado</a>
 <br>
 <?php endif; ?>
 <a href="index.php?view=producto&product_id=<?php echo $p->id; ?>">Detalles</a>

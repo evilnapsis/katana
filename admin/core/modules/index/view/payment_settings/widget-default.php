@@ -38,42 +38,7 @@ $paymethods = PaymethodData::getAll();
                         </tbody>
                         </table>
                         </div>
-<?php if(PaymethodData::getByName("paypal")->is_active):?>
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <i class="fa fa-paypal"></i> Paypal
-                </div>
-<form method="post" action="./?action=updatepmsettings">
-                    <table class="table table-bordered">
-                      <tbody>
-                        <?php
- if(count($settings)>0):?>
-<?php foreach($settings as $cat):?>
-  <?php 
-  if(substr($cat->name, 0,7)=="paypal_"):?>
-                        <tr>
-                        <td><?php echo $cat->label; ?>
-                        </td>
-                        <td>
-                        <input type="text" name="<?php echo $cat->name; ?>" class="form-control" value="<?php echo $cat->val;?>">
-                        </td>
-                        </tr>
- <?php endif; ?>
-<?php endforeach; ?>
- <?php endif; ?>
 
-                        <tr>
-                        <td>
-                        </td>
-                        <td>
-                        <input type="submit"  class="btn btn-success" value="Actualizar Datos PayPal">
-                        </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    </form>
-              </div>
-            <?php endif; ?>
 <?php if(PaymethodData::getByName("bank")->is_active):?>
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -102,7 +67,7 @@ $paymethods = PaymethodData::getAll();
                         <td>
                         </td>
                         <td>
-                        <input type="submit"  class="btn btn-success" value="Actualizar Datos PayPal">
+                        <input type="submit"  class="btn btn-success" value="Actualizar Datos">
                         </td>
                         </tr>
                       </tbody>

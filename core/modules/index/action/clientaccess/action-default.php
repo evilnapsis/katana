@@ -7,7 +7,7 @@ $found = false;
 // print_r($user);
 
 foreach ($users as $user) {
-	if(crypt($_POST["password"],$user->password )==$user->password){
+	if(sha1(md5($_POST["password"]))==$user->password){
 		$_SESSION["client_id"]=$user->id;
 		$found=true;
 	}

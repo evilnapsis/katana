@@ -12,7 +12,8 @@
 
     <!-- Add custom CSS here -->
     <link href="../res/lib/sb-admin.css" rel="stylesheet">
-    <link rel="stylesheet" href="../res/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../res/lib/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../res/lib/fontawesome/css/all.min.css">
   <script src="res/jquery.min.js"></script>
 
 <script src="res/morris/raphael-min.js"></script>

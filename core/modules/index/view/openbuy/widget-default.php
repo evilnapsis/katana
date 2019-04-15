@@ -17,13 +17,13 @@ $products = BuyProductData::getAllByBuyId($buy->id);
 
 <div class="col-md-12">
 <h3>Bienvenido, <?php echo $client->name." ".$client->lastname; ?></h3>
-	<a href="./index.php?view=client" class="btn btn-default"><i class="fa fa-chevron-left"></i> Regresar</a>
-	<a href="./invoice.php?code=<?php echo $buy->code;?>" class="btn btn-default"><i class="fa fa-file-o"></i> Imprimir</a>
-<br></div>
-
+	<a href="./index.php?view=client" class="btn btn-secondary"><i class="fa fa-chevron-left"></i> Regresar</a>
+	<a href="./invoice.php?code=<?php echo $buy->code;?>" class="btn btn-secondary"><i class="fa fa-file"></i> Imprimir</a>
+</div>
 
 </div>
 </div>
+<br>
 <div class="container">
 <div class="row">
 	<div class="col-md-12">
