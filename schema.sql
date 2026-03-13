@@ -1,6 +1,7 @@
 /**
 @author evilnapsis
-@brief Modelo de base de datos
+@brief Modelo de base de datos de sistema katan
+@ updated 2026-03-13
 **/
 create database katanalite;
 use katanalite;
@@ -68,6 +69,7 @@ create table product (
 	is_featured boolean  default 0,
 	is_public boolean  default 0,
 	in_existence boolean  default 0,
+	is_offert boolean  default 0,
 	created_at datetime ,
 	order_at datetime ,
 	price float ,
@@ -81,15 +83,6 @@ create table product (
 	foreign key(category_id) references category(id)
 );
 
-/*create table product_image(
-	id int not null auto_increment primary key,
-	title varchar(200) not null,
-	description varchar(1000) not null,
-	image varchar(255),	
-	image_id int not null,
-	foreign key(image_id) references image(id)
-);
-*/
 
 create table coupon (
 	id int not null auto_increment primary key,
@@ -105,7 +98,6 @@ create table coupon (
 	created_at datetime,
 	foreign key(product_id) references product(id)
 );
-
 
 create table product_view(
 	id int not null auto_increment primary key,

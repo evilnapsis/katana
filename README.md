@@ -1,7 +1,20 @@
-# Katana
-Sistema de Tienda en Linea
+# Katana Shop v4
+Katana Shop v4 es un sistema de tienda en linea con carrito de compras sencilla.
 
-### Características
+En Katana Shop v4 se pueden gestionar productos, categorias, usuarios, ventas, etc.
+
+Kata Shop cuenta con una vista de tienda en linea y un modulo administrador.
+
+## Modulos
+- Productos
+- Categorias
+- Usuarios
+- Ventas
+- Reportes
+- Configuraciones
+- Slider
+
+## Características
 
 - Gestión de productos, precios, etc
 - Vista de productos destacados, por categoría y búsqueda
@@ -18,7 +31,13 @@ Sistema de Tienda en Linea
 - Controla los usuarios que tendran acceso al sistema de administración
 - Mucho mas
 
-### Actualizaciones
+## Actualizaciones
+- Update 2026-03-13
+- Se actualizo a PHP 8.2
+- Se actualizo a Bootstrap 5.3
+- Se actualizo a Tabler 1.4
 - 2019/Apr/15: Actualizacion del front a Bootstrap 4.
 
-Link: http://evilnapsis.com/2015/10/16/katana-lite-sistema-de-tienda-en-linea/
+## Referencias
+- https://evilnapsis.com/portfolio/katana/
+- https://evilnapsis.com/2015/10/16/katana-lite-sistema-de-tienda-en-linea/

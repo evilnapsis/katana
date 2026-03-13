@@ -3,9 +3,13 @@
 
 // 14 de Abril del 2014
 // Core.php
+// updated 12 de Marzo del 2026
 // @brief obtiene las configuraciones, muestra y carga los contenidos necesarios.
 
 class Core {
+
+	public static $debug_sql = false;
+	public static $user = null;
 
 	public static function includeCSS(){
 		$path = "res/css/";
@@ -24,12 +28,13 @@ class Core {
 		}
 
 	}
-	public static function alert($text){
-		echo "<script>alert('".$text."');</script>";
-	}
 
 	public static function redir($url){
 		echo "<script>window.location='".$url."';</script>";
+	}
+
+	public static function alert($txt){
+		echo "<script>alert('".$txt."');</script>";
 	}
 
 	public static function includeJS(){
