@@ -174,6 +174,13 @@
                     <a class="dropdown-item" href="./?view=settings&opt=payment">Metodos de Pago</a>
                   </div>
                 </li>
+                <?php else: ?>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./?view=login" >
+                      <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="bi bi-box-arrow-in-right"></i></span>
+                      <span class="nav-link-title">Iniciar Sesión</span>
+                    </a>
+                  </li>
                 <?php endif; ?>
               </ul>
             </div>
