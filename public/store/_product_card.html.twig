@@ -1,0 +1,33 @@
+{% set p = item.product %}
+{% set in_cart = session.cart is defined and (session.cart|filter(c => c.product_id == p.id)|length > 0) %}
+<div class="{{ col_class|default('col-sm-6 col-lg-4') }}">
+  <div class="card card-sm shadow-sm h-100 border-0 transition-transform hover-translate-y-n3">
+    <a href="{{ base_url }}/product/{{ p.id }}" class="d-block text-center p-3">
+      <img src="{{ legacy_public_url }}/{{ item.image }}" class="img-fluid rounded" style="height: 180px; object-fit: contain;" alt="{{ p.name }}">
+    </a>
+    <div class="card-body d-flex flex-column pt-0">
+      <div class="mb-3">
+        <h3 class="h4 mb-1"><a href="{{ base_url }}/product/{{ p.id }}" class="text-dark text-decoration-none">{{ p.name }}</a></h3>
+        <div class="text-primary h2 mb-0 fw-bold">{{ coin }} {{ p.price|number_format(2) }}</div>
+      </div>
+      <div class="mt-auto d-grid gap-2">
+        {% if not p.in_existence %}
+          <button class="btn btn-warning disabled">
+            <i class="bi bi-x-circle me-1"></i> No Disponible
+          </button>
+        {% elseif in_cart %}
+          <a href="{{ base_url }}/cart" class="btn btn-success">
+            <i class="bi bi-check-lg me-1"></i> En el carrito
+          </a>
+        {% else %}
+          <a href="{{ base_url }}/cart/add/{{ p.id }}" class="btn btn-primary shadow-sm">
+            <i class="bi bi-cart-plus me-1"></i> Comprar
+          </a>
+        {% endif %}
+        {% if show_details|default(false) %}
+          <a href="{{ base_url }}/product/{{ p.id }}" class="btn btn-outline-secondary btn-sm">Detalles</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

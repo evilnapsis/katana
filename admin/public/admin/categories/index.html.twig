@@ -1,0 +1,166 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Categorías{% endblock %}
+{% block nav_categories %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-tags me-2 text-indigo-600"></i> Categorías Principales
+    </h2>
+    <p class="text-muted small mb-0">Gestión de familias y agrupaciones principales para organizar el catálogo de la tienda.</p>
+  </div>
+  <button type="button" class="btn btn-indigo rounded-pill px-3 shadow-sm" data-coreui-toggle="modal" data-coreui-target="#addCategoryModal">
+    <i class="bi bi-plus-lg me-1"></i> Nueva Categoría
+  </button>
+</div>
+
+<!-- Modal Agregar Categoría -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow" style="border-radius: 16px; overflow: hidden;">
+      <div class="modal-header bg-dark text-white py-3">
+        <h5 class="modal-title fs-6 fw-bold" id="addCategoryLabel">
+          <i class="bi bi-tag-fill me-2 text-indigo-400"></i> Nueva Categoría
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-coreui-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form method="post" action="{{ base_url }}/category/create">
+          {{ csrf_field() }}
+          <div class="mb-3">
+            <label class="form-label fw-semibold small text-muted">Nombre de la Categoría <span class="text-danger">*</span></label>
+            <input type="text" required class="form-control" name="name" placeholder="Ej. Electrónica">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small text-muted">Nombre Corto / Slug URL <span class="text-danger">*</span></label>
+            <input type="text" required class="form-control" name="short_name" placeholder="Ej. electronica">
+            <div class="form-text small">Se utiliza en la URL: tienda.com/category/electronica</div>
+          </div>
+          <div class="mb-4 p-3 bg-light rounded-3 border">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" name="is_active" id="is_active_add" checked>
+              <label class="form-check-label fw-semibold text-dark" for="is_active_add">Categoría Activa</label>
+              <div class="form-text small" style="font-size: 11px;">Visible en la navegación pública</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-light rounded-pill px-3" data-coreui-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+              <i class="bi bi-check-lg me-1"></i> Guardar Categoría
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-list-task me-2 text-indigo-400"></i> Listado de Categorías</span>
+        <span class="badge bg-secondary rounded-pill">{{ categories|length }} registros</span>
+      </div>
+      <div class="card-body p-0">
+        {% if categories|length > 0 %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 datatable">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3" style="width: 70px;">ID</th>
+                <th>Nombre</th>
+                <th>Slug (URL)</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center pe-3" style="width: 140px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cat in categories %}
+              <tr>
+                <td class="ps-3 fw-bold text-muted small">#{{ cat.id }}</td>
+                <td class="fw-bold text-dark">{{ cat.name }}</td>
+                <td><code class="text-indigo-600 bg-indigo-50 px-2 py-1 rounded small">/category/{{ cat.short_name }}</code></td>
+                <td class="text-center">
+                  {% if cat.is_active %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill"><i class="bi bi-check-circle"></i> Activa</span>
+                  {% else %}
+                    <span class="badge bg-rose-100 text-rose-700 rounded-pill"><i class="bi bi-x-circle"></i> Inactiva</span>
+                  {% endif %}
+                </td>
+                <td class="text-center pe-3">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ base_url }}/../category/{{ cat.short_name }}" target="_blank" class="btn btn-outline-secondary" title="Ver en tienda pública">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <button type="button" class="btn btn-outline-warning" data-coreui-toggle="modal" data-coreui-target="#editModal-{{ cat.id }}" title="Editar">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <form method="post" action="{{ base_url }}/category/{{ cat.id }}/delete" style="display:inline" onsubmit="return confirm('¿Estás seguro de eliminar esta categoría?')">
+                      {{ csrf_field() }}
+                      <button type="submit" class="btn btn-outline-danger" title="Eliminar" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+
+                  <!-- Edit Modal -->
+                  <div class="modal fade text-start" id="editModal-{{ cat.id }}" tabindex="-1" aria-labelledby="editModalLabel-{{ cat.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content border-0 shadow" style="border-radius: 16px; overflow: hidden;">
+                        <div class="modal-header bg-dark text-white py-3">
+                          <h5 class="modal-title fs-6 fw-bold" id="editModalLabel-{{ cat.id }}">
+                            <i class="bi bi-pencil-square me-2 text-indigo-400"></i> Editar Categoría
+                          </h5>
+                          <button type="button" class="btn-close btn-close-white" data-coreui-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                          <form method="post" action="{{ base_url }}/category/{{ cat.id }}/update">
+                            {{ csrf_field() }}
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold small text-muted">Nombre de la Categoría <span class="text-danger">*</span></label>
+                              <input type="text" required class="form-control" name="name" value="{{ cat.name }}">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label fw-semibold small text-muted">Nombre Corto / Slug <span class="text-danger">*</span></label>
+                              <input type="text" required class="form-control" value="{{ cat.short_name }}" name="short_name">
+                            </div>
+                            <div class="mb-4 p-3 bg-light rounded-3 border">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="is_active_edit-{{ cat.id }}" {% if cat.is_active %}checked{% endif %}>
+                                <label class="form-check-label fw-semibold text-dark" for="is_active_edit-{{ cat.id }}">Categoría Activa</label>
+                              </div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2">
+                              <button type="button" class="btn btn-light rounded-pill px-3" data-coreui-dismiss="modal">Cancelar</button>
+                              <button type="submit" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+                                <i class="bi bi-check-lg me-1"></i> Actualizar
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-5 text-center text-muted">
+          <i class="bi bi-tags display-4 text-muted opacity-50 mb-2"></i>
+          <p class="mb-3">No hay categorías registradas en el sistema.</p>
+          <button type="button" class="btn btn-indigo rounded-pill px-4 shadow-sm" data-coreui-toggle="modal" data-coreui-target="#addCategoryModal">
+            <i class="bi bi-plus-lg me-1"></i> Agregar Primera Categoría
+          </button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

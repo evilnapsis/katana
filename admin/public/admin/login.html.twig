@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Katana Lite - Acceso Admin</title>
+    <link rel="stylesheet" href="{{ base_url }}/assets/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="{{ base_url }}/assets/bootstrap-icons/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .text-indigo-900 { color: #1e1b4b !important; }
+        .text-indigo-400 { color: #818cf8 !important; }
+        .text-indigo-300 { color: #a5b4fc !important; }
+        .bg-indigo-100 { background-color: #e0e7ff !important; }
+    </style>
+</head>
+<body>
+    <div class="min-vh-100 d-flex flex-row align-items-center" style="background: radial-gradient(circle at top right, #4f46e5, #1e1b4b);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card shadow-lg border-0 overflow-hidden" style="border-radius: 24px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-5">
+                                <div class="avatar avatar-xl bg-indigo-100 text-indigo-600 mb-3 mx-auto d-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: #e0e7ff;">
+                                    <i class="bi bi-shop fs-1"></i>
+                                </div>
+                                <h1 class="h3 fw-bold text-indigo-900">KATANA LITE</h1>
+                                <p class="text-indigo-400 small text-uppercase fw-bold tracking-widest">Admin Access</p>
+                            </div>
+
+                            {% if error %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endif %}
+                            {% for type, message in flashes %}
+                            <div class="alert alert-{{ type == 'error' ? 'danger' : (type == 'success' ? 'success' : 'info') }}">{{ message }}</div>
+                            {% endfor %}
+
+                            <form method="post" action="{{ base_url }}/login">
+                                {{ csrf_field() }}
+                                <div class="mb-4">
+                                    <label class="form-label fw-600 small text-indigo-900">Usuario</label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-white border-end-0 text-indigo-300"><i class="bi bi-person"></i></span>
+                                        <input class="form-control border-start-0 ps-0" name="username" required type="text" placeholder="nombre.usuario">
+                                    </div>
+                                </div>
+                                <div class="mb-5">
+                                    <label class="form-label fw-600 small text-indigo-900">Contraseña</label>
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-white border-end-0 text-indigo-300"><i class="bi bi-lock"></i></span>
+                                        <input class="form-control border-start-0 ps-0" name="password" required type="password" placeholder="••••••••">
+                                    </div>
+                                </div>
+                                <div class="d-grid shadow-indigo-200">
+                                    <button class="btn btn-indigo btn-lg shadow-sm fw-bold py-3 text-white" type="submit" style="background: #6366f1; border:none; border-radius: 12px;">Entrar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

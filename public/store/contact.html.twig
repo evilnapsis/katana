@@ -1,0 +1,37 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4">Envíanos un mensaje</h2>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <form method="post" action="{{ base_url }}/contact">
+            {{ csrf_field() }}
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input type="text" name="name" class="form-control" placeholder="Tu nombre">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico</label>
+              <input type="email" name="email" class="form-control" placeholder="Tu email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Asunto</label>
+              <input type="text" name="subject" class="form-control" placeholder="Asunto del mensaje">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mensaje</label>
+              <textarea name="message" rows="4" placeholder="Escribe tu mensaje" required class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

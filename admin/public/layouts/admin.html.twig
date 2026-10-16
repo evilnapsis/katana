@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Katana Lite - Tienda Online y Sistema de Ventas">
+    <meta name="author" content="Evilnapsis">
+    <title>Katana Lite - {% block title %}Dashboard Admin{% endblock %}</title>
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="{{ base_url }}/assets/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="{{ base_url }}/assets/css/vendors/simplebar.css">
+    <!-- Main styles for this application-->
+    <link href="{{ base_url }}/assets/css/style.css" rel="stylesheet">
+    <script src="{{ base_url }}/assets/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ base_url }}/assets/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="{{ base_url }}/assets/datatables/datatables.min.css">
+    <script type="text/javascript" src="{{ base_url }}/assets/sweetalert/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+      .sidebar { background: #1e1b4b !important; }
+      .sidebar-nav .nav-link:hover { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+      .sidebar-nav .nav-link.active { background: #6366f1 !important; }
+      .nav-title { color: #818cf8 !important; font-weight: 700; letter-spacing: 1px; }
+      .header { background: rgba(255, 255, 255, 0.8) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05) !important; }
+      .card { border-radius: 20px; border: none; transition: transform 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+      .btn-primary { background: #6366f1; border: none; border-radius: 10px; padding: 10px 20px; }
+      .btn-primary:hover { background: #4f46e5; }
+      .text-indigo-400 { color: #818cf8 !important; }
+      .text-indigo-600 { color: #4f46e5 !important; }
+      .text-indigo-700 { color: #4338ca !important; }
+      .text-indigo-900 { color: #1e1b4b !important; }
+      .bg-indigo-50 { background-color: #f5f3ff !important; }
+      .bg-indigo-100 { background-color: #e0e7ff !important; }
+      .text-emerald-700 { color: #047857 !important; }
+      .bg-emerald-100 { background-color: #d1fae5 !important; }
+      .text-amber-700 { color: #b45309 !important; }
+      .bg-amber-100 { background-color: #fef3c7 !important; }
+      .btn-indigo { background-color: #6366f1 !important; color: white !important; }
+      .btn-indigo:hover { background-color: #4f46e5 !important; }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
+      <div class="sidebar-header border-bottom border-white border-opacity-10">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-full" style="font-size:20px; font-weight: 700;"><i class="bi bi-shop me-2 text-indigo-400"></i>KATANA <span class="badge bg-indigo-100 text-indigo-900 fs-6">LITE</span></span>
+          <span class="sidebar-brand-narrow">KL</span>
+        </div>
+        <button class="btn-close d-lg-none" type="button" data-coreui-dismiss="offcanvas" data-coreui-theme="dark" aria-label="Close" onclick="coreui.Sidebar.getInstance(document.querySelector(&quot;#sidebar&quot;)).toggle()"></button>
+      </div>
+      <ul class="sidebar-nav" data-coreui-navigation data-simplebar>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_home %}{% endblock %}" href="{{ base_url }}">
+            <i class="nav-icon bi bi-grid-1x2"></i> Inicio
+          </a>
+        </li>
+
+        <li class="nav-title text-uppercase small">Operaciones</li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_sells %}{% endblock %}" href="{{ base_url }}/sells">
+            <i class="nav-icon bi bi-cart-check"></i> Pedidos
+          </a>
+        </li>
+
+        <li class="nav-title text-uppercase small">Catálogos</li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_products %}{% endblock %}" href="{{ base_url }}/products">
+            <i class="nav-icon bi bi-box-seam"></i> Productos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_categories %}{% endblock %}" href="{{ base_url }}/categories">
+            <i class="nav-icon bi bi-tags"></i> Categorías
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_clients %}{% endblock %}" href="{{ base_url }}/clients">
+            <i class="nav-icon bi bi-people"></i> Clientes
+          </a>
+        </li>
+
+        <li class="nav-title text-uppercase small">Diseño</li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_slides %}{% endblock %}" href="{{ base_url }}/slides">
+            <i class="nav-icon bi bi-images"></i> Sliders
+          </a>
+        </li>
+
+        <li class="nav-title text-uppercase small">Config</li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_settings %}{% endblock %}" href="{{ base_url }}/settings">
+            <i class="nav-icon bi bi-gear"></i> Sistema
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% block nav_users %}{% endblock %}" href="{{ base_url }}/users">
+            <i class="nav-icon bi bi-person-badge"></i> Usuarios
+          </a>
+        </li>
+
+        <li class="nav-title text-uppercase small text-warning">Versión Premium</li>
+        <li class="nav-item">
+          <a class="nav-link text-warning fw-semibold" href="https://evilnapsis.com/product/katana/" target="_blank" rel="noopener noreferrer">
+            <i class="nav-icon bi bi-star-fill text-warning"></i> Ver Katana Pro
+            <span class="badge bg-warning text-dark ms-auto" style="font-size: 10px;">PRO</span>
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer border-top border-white border-opacity-10 d-none d-md-flex">
+        <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
+      </div>
+    </div>
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light bg-opacity-50">
+      <header class="header header-sticky p-0 mb-4 shadow-sm">
+        <div class="container-fluid px-4 h-100 d-flex align-items-center">
+          <button class="header-toggler border-0 bg-transparent" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()" style="margin-inline-start: -14px;">
+            <i class="bi bi-list fs-3 text-secondary"></i>
+          </button>
+
+          <ul class="header-nav ms-auto"></ul>
+          <ul class="header-nav">
+            <li class="nav-item dropdown"><a class="nav-link py-0 pe-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <div class="d-flex align-items-center">
+                    <div class="text-end me-3 d-none d-md-block">
+                        <div class="fw-bold small">{{ user.name }}</div>
+                        <div class="text-muted small" style="font-size: 10px;">En Línea</div>
+                    </div>
+                    <div class="avatar avatar-md text-white d-flex align-items-center justify-content-center rounded-circle fw-bold shadow-sm" style="background:#6366f1">
+                      {{ user.name|slice(0, 1) }}{{ user.lastname|default('')|slice(0, 1) }}
+                    </div>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end pt-0 shadow-lg border-0 overflow-hidden" style="border-radius: 12px; min-width: 200px;">
+                <div class="dropdown-header bg-light text-body-secondary fw-semibold mb-2">Cuenta</div>
+                <a class="dropdown-item py-2" href="{{ base_url }}/logout">
+                  <i class="bi bi-box-arrow-right me-3 text-danger"></i> Salir del Sistema
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </header>
+      <div class="body flex-grow-1 pb-4">
+        <div class="container-fluid px-4">
+          {% for type, message in flashes %}
+            <div class="alert alert-{{ type == 'error' ? 'danger' : (type == 'success' ? 'success' : 'info') }} alert-dismissible fade show shadow-sm" role="alert">
+              {{ message }}
+            </div>
+          {% endfor %}
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+      <footer class="footer px-4 border-top-0 bg-transparent text-muted small pb-4">
+        <div>Katana Lite v7.0</div>
+        <div class="ms-auto">Built with <i class="bi bi-heart-fill text-danger mx-1"></i> by Evilnapsis</div>
+      </footer>
+    </div>
+    <!-- CoreUI and necessary plugins-->
+    <script src="{{ base_url }}/assets/coreui/js/coreui.bundle.min.js"></script>
+    <script src="{{ base_url }}/assets/simplebar/js/simplebar.min.js"></script>
+    <script src="{{ base_url }}/assets/datatables/datatables.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".datatable").each(function(){
+          if ( ! $.fn.DataTable.isDataTable( this ) ) {
+            $(this).DataTable({
+              "retrieve": true,
+              "responsive": true,
+              "language": {
+                "url": "{{ base_url }}/assets/datatables/esmx.json"
+              }
+            });
+          }
+        });
+        $(".nav-group-toggle").click(function(e){
+          e.preventDefault();
+          $(this).parent().toggleClass("show");
+        });
+      });
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

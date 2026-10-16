@@ -1,0 +1,72 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Nuevo Cliente{% endblock %}
+{% block nav_clients %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-person-plus me-2 text-indigo-600"></i> Nuevo Cliente
+    </h2>
+    <p class="text-muted small mb-0">Registra manualmente una cuenta de cliente comprador en la plataforma.</p>
+  </div>
+  <a href="{{ base_url }}/clients" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+    <i class="bi bi-arrow-left me-1"></i> Volver a Clientes
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-person-badge me-2 text-indigo-400"></i> Formulario de Alta de Cliente</span>
+        <span class="badge bg-indigo-50 text-indigo-600 rounded-pill">Campos obligatorios *</span>
+      </div>
+      <div class="card-body p-4">
+        <form method="post" action="{{ base_url }}/client/create">
+          {{ csrf_field() }}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label fw-semibold small text-muted">Nombre(s) <span class="text-danger">*</span></label>
+              <input type="text" name="name" required class="form-control" id="name" placeholder="Ej. Juan Carlos">
+            </div>
+            <div class="col-md-6">
+              <label for="lastname" class="form-label fw-semibold small text-muted">Apellidos <span class="text-danger">*</span></label>
+              <input type="text" name="lastname" required class="form-control" id="lastname" placeholder="Ej. Pérez Gómez">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label fw-semibold small text-muted">Correo Electrónico <span class="text-danger">*</span></label>
+              <input type="email" name="email" required class="form-control" id="email" placeholder="cliente@correo.com">
+            </div>
+            <div class="col-md-6">
+              <label for="phone" class="form-label fw-semibold small text-muted">Teléfono de Contacto</label>
+              <input type="text" name="phone" class="form-control" id="phone" placeholder="Ej. +52 55 1234 5678">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="address" class="form-label fw-semibold small text-muted">Dirección de Envío Principal</label>
+            <input type="text" name="address" class="form-control" id="address" placeholder="Calle, número, colonia, ciudad, código postal">
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold small text-muted">Contraseña de Acceso <span class="text-danger">*</span></label>
+            <input type="password" name="password" required class="form-control" id="password" placeholder="Mínimo 6 caracteres">
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-2">
+            <a href="{{ base_url }}/clients" class="btn btn-light rounded-pill px-4">Cancelar</a>
+            <button type="submit" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+              <i class="bi bi-check-lg me-1"></i> Registrar Cliente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

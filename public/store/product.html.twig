@@ -1,0 +1,82 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="row row-cards">
+    <div class="col-lg-3">
+      {% include "store/_category_sidebar.html.twig" with {nav_categories: nav_categories, cat: cat} %}
+    </div>
+
+    <div class="col-lg-9">
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{{ base_url }}/">Inicio</a></li>
+          {% if cat %}
+          <li class="breadcrumb-item"><a href="{{ base_url }}/category/{{ cat.short_name }}">{{ cat.name }}</a></li>
+          {% endif %}
+          <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+      </nav>
+
+      <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+        <div class="row g-0">
+          <div class="col-md-6 bg-white d-flex align-items-center justify-content-center p-4">
+            <img src="{{ legacy_public_url }}/{{ image }}" class="img-fluid rounded" style="max-height: 400px; object-fit: contain;" alt="{{ product.name }}">
+          </div>
+          <div class="col-md-6 border-start bg-light bg-opacity-50">
+            <div class="card-body p-4">
+              <h1 class="display-6 fw-bold mb-3">{{ product.name }}</h1>
+
+              <div class="mb-4">
+                <span class="h1 text-primary fw-bold">{{ coin }} {{ product.price|number_format(2) }}</span>
+                {% if not product.in_existence %}
+                  <span class="badge bg-warning ms-2">Agotado</span>
+                {% else %}
+                  <span class="badge bg-success ms-2">En existencia</span>
+                {% endif %}
+              </div>
+
+              <div class="d-grid gap-2 mb-4">
+                {% if not product.in_existence %}
+                  <button class="btn btn-warning btn-lg disabled shadow-sm">
+                    <i class="bi bi-x-circle me-2"></i> No Disponible
+                  </button>
+                {% elseif session.cart is defined and (session.cart|filter(c => c.product_id == product.id)|length > 0) %}
+                  <button class="btn btn-success btn-lg shadow-sm disabled">
+                    <i class="bi bi-check2-circle me-2"></i> Ya está en el carrito
+                  </button>
+                {% else %}
+                  <a href="{{ base_url }}/cart/add/{{ product.id }}" class="btn btn-primary btn-lg shadow-sm">
+                    <i class="bi bi-cart-plus me-2"></i> Añadir al Carrito
+                  </a>
+                {% endif %}
+              </div>
+
+              <hr class="my-4">
+              <div class="small text-muted">
+                <strong>Código / SKU:</strong> {{ product.code|default('N/A') }}<br>
+                {% if cat %}<strong>Categoría:</strong> {{ cat.name }}<br>{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+          <h4 class="card-title text-indigo-900 fw-bold mb-0">
+            <i class="bi bi-card-text me-2 text-primary"></i> Descripción del Producto
+          </h4>
+        </div>
+        <div class="card-body p-4">
+          <div class="prose">
+            {{ product.description|nl2br }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

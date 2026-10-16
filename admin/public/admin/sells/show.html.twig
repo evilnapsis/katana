@@ -1,0 +1,97 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Detalle de Venta #{{ buy.id }}{% endblock %}
+{% block nav_sells %}active{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+  <div class="col-md-12 d-flex justify-content-between align-items-center">
+    <h2>DETALLE DE VENTA #{{ buy.id }}</h2>
+    <a href="{{ base_url }}/sells" class="btn btn-secondary">
+      <i class="bi bi-arrow-left pe-2"></i> Volver a Ventas
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4 border-info">
+      <div class="card-header bg-info text-white">
+        <i class="bi bi-info-circle-fill pe-2"></i> Información de la Venta
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <p><strong>Cliente:</strong> {{ client ? client.getFullname() : 'N/A' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p><strong>Método de pago:</strong> {{ paymethod ? paymethod.name : 'N/A' }}</p>
+          </div>
+          <div class="col-md-4">
+            <p><strong>Estado:</strong> <span class="badge bg-secondary">{{ buy.getStatus().name }}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if products|length > 0 %}
+    <div class="card mb-4 border-primary">
+      <div class="card-header bg-primary text-white">
+        <i class="bi bi-bag-check-fill pe-2"></i> Productos Comprados
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 100px;"></th>
+                <th>Código</th>
+                <th>Producto</th>
+                <th class="text-end">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in products %}
+              <tr>
+                <td class="text-center">
+                  <a target="_blank" href="{{ legacy_admin_url }}/../?view=producto&product_id={{ row.product.id }}" class="btn btn-outline-secondary btn-sm" title="Ver detalles">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                </td>
+                <td>{{ row.product.code }}</td>
+                <td>{{ row.product.name }}</td>
+                <td class="text-end">{{ coin }} {{ row.line_total|number_format(2, '.', ',') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-5 offset-md-7">
+        <div class="card mb-4 border-primary">
+          <div class="card-body p-0">
+            <table class="table table-bordered mb-0">
+              <tr>
+                <td class="bg-light fw-bold">Subtotal</td>
+                <td class="text-end">{{ coin }} {{ subtotal_display|number_format(2, '.', ',') }}</td>
+              </tr>
+              <tr>
+                <td class="bg-light fw-bold">{{ iva_txt }} ({{ iva }}%)</td>
+                <td class="text-end">{{ coin }} {{ iva_amount|number_format(2, '.', ',') }}</td>
+              </tr>
+              <tr class="table-success fw-bold">
+                <td>TOTAL</td>
+                <td class="text-end">{{ coin }} {{ total_final|number_format(2, '.', ',') }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

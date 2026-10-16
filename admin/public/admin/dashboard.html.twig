@@ -1,0 +1,443 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Dashboard General{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <div>
+        <h2 class="h3 fw-bold text-indigo-900 mb-1">
+            <i class="bi bi-speedometer2 text-indigo-600 me-2"></i>Panel de Control
+        </h2>
+        <p class="text-muted small mb-0">Resumen operativo, métricas de ventas y actividad reciente en la tienda.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill shadow-sm">
+            <i class="bi bi-calendar3 me-1 text-indigo-600"></i> {{ "now"|date("d/m/Y") }}
+        </span>
+        <a href="{{ base_url }}/products" class="btn btn-indigo btn-sm rounded-pill px-3 shadow-sm">
+            <i class="bi bi-box-seam me-1"></i> Catálogo
+        </a>
+    </div>
+</div>
+
+{# 1. SECCIÓN DE 6 WIDGETS CONTADORES #}
+<div class="row g-3 mb-4">
+    {# Widget 1: Ventas Totales #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-indigo-600" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Ingresos</span>
+                <div class="avatar avatar-sm rounded-3 bg-indigo-50 text-indigo-600 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-cash-stack fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-indigo-900 mb-1">{{ widgets.income.formatted }}</div>
+            <div class="d-flex align-items-center small text-muted" style="font-size: 11px;">
+                <span class="badge bg-emerald-100 text-emerald-700 me-1 rounded-pill">
+                    <i class="bi bi-check2"></i> {{ widgets.income.completed_count }}
+                </span>
+                <span>completadas</span>
+            </div>
+        </div>
+    </div>
+
+    {# Widget 2: Pedidos #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-primary" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Pedidos</span>
+                <div class="avatar avatar-sm rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-cart-check fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-dark mb-1">{{ widgets.orders.total }}</div>
+            <div class="d-flex align-items-center small" style="font-size: 11px;">
+                {% if widgets.orders.pending > 0 %}
+                    <span class="badge bg-amber-100 text-amber-700 rounded-pill me-1">
+                        <i class="bi bi-hourglass-split"></i> {{ widgets.orders.pending }} pend.
+                    </span>
+                {% else %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill me-1">Al día</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# Widget 3: Productos #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-success" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Productos</span>
+                <div class="avatar avatar-sm rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-box-seam fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-dark mb-1">{{ widgets.products.total }}</div>
+            <div class="small text-muted" style="font-size: 11px;">
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill me-1">
+                    <i class="bi bi-check-circle"></i> {{ widgets.products.in_stock }}
+                </span>
+                <span>en stock</span>
+            </div>
+        </div>
+    </div>
+
+    {# Widget 4: Clientes #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-info" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Clientes</span>
+                <div class="avatar avatar-sm rounded-3 bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-people fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-dark mb-1">{{ widgets.clients.total }}</div>
+            <div class="small text-muted" style="font-size: 11px;">
+                <span class="badge bg-info bg-opacity-10 text-info rounded-pill me-1">
+                    <i class="bi bi-shield-check"></i> {{ widgets.clients.active }}
+                </span>
+                <span>activos</span>
+            </div>
+        </div>
+    </div>
+
+    {# Widget 5: Categorías #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-warning" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Categorías</span>
+                <div class="avatar avatar-sm rounded-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-tags fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-dark mb-1">{{ widgets.categories.total }}</div>
+            <div class="small text-muted" style="font-size: 11px;">
+                <a href="{{ base_url }}/categories" class="text-decoration-none text-muted">
+                    Gestionar <i class="bi bi-arrow-right-short"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# Widget 6: Sliders #}
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="card h-100 p-3 shadow-sm border-0 border-start border-4 border-danger" style="border-radius: 16px;">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase" style="font-size: 11px;">Sliders</span>
+                <div class="avatar avatar-sm rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-images fs-5"></i>
+                </div>
+            </div>
+            <div class="h4 fw-bold text-dark mb-1">{{ widgets.slides.total }}</div>
+            <div class="small text-muted" style="font-size: 11px;">
+                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill me-1">
+                    {{ widgets.slides.active }}
+                </span>
+                <span>activos</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# 2. GRÁFICA DE VENTAS ÚLTIMOS 30 DÍAS #}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card p-4 shadow-sm border-0" style="border-radius: 20px;">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+                <div>
+                    <h5 class="fw-bold mb-1 text-indigo-900">
+                        <i class="bi bi-graph-up-arrow text-indigo-600 me-2"></i>Ventas de los Últimos 30 Días
+                    </h5>
+                    <p class="text-muted small mb-0">Evolución diaria de ingresos por ventas en la plataforma.</p>
+                </div>
+                <div class="d-flex align-items-center gap-3 bg-light px-3 py-2 rounded-3 border">
+                    <div>
+                        <div class="text-muted small" style="font-size: 10px; text-transform: uppercase;">Total Periodo</div>
+                        <div class="fw-bold text-indigo-600 fs-6">{{ coin }} {{ sales_chart.period_total|number_format(2) }}</div>
+                    </div>
+                    <div class="border-start ps-3">
+                        <div class="text-muted small" style="font-size: 10px; text-transform: uppercase;">Pedidos</div>
+                        <div class="fw-bold text-dark fs-6">{{ sales_chart.period_orders }} órdenes</div>
+                    </div>
+                </div>
+            </div>
+            <div style="position: relative; height: 310px; width: 100%;">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# 3. SECCIÓN DE 3 COLUMNAS: TOP PRODUCTOS, ÚLTIMAS VENTAS, ÚLTIMOS CLIENTES #}
+<div class="row g-4">
+    {# Columna 1: Top Productos (Gráfica Pie / Doughnut) #}
+    <div class="col-lg-4 col-md-12">
+        <div class="card p-4 shadow-sm border-0 h-100 d-flex flex-column" style="border-radius: 20px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-indigo-900">
+                    <i class="bi bi-pie-chart text-indigo-600 me-2"></i>Top Productos
+                </h5>
+                <span class="badge bg-indigo-50 text-indigo-600 rounded-pill">Más vendidos</span>
+            </div>
+
+            {% if top_products.has_data %}
+                <div class="my-auto py-2" style="position: relative; height: 230px;">
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+                <div class="mt-3 pt-3 border-top">
+                    <div class="small fw-semibold text-muted text-uppercase mb-2" style="font-size: 11px;">Ranking de Artículos</div>
+                    <ul class="list-group list-group-flush">
+                        {% for item in top_products.items %}
+                            <li class="list-group-item px-0 py-2 d-flex align-items-center justify-content-between border-0">
+                                <div class="d-flex align-items-center text-truncate me-2">
+                                    <span class="rounded-circle d-inline-block me-2 flex-shrink-0" style="width: 10px; height: 10px; background-color: {{ item.color }};"></span>
+                                    <span class="small fw-semibold text-dark text-truncate" title="{{ item.name }}">{{ item.name }}</span>
+                                </div>
+                                <div class="text-end flex-shrink-0">
+                                    <span class="badge bg-light text-dark fw-bold border rounded-pill">{{ item.units }} un.</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted my-auto">
+                    <i class="bi bi-basket3 display-4 text-muted opacity-50 mb-2"></i>
+                    <p class="small mb-0">Aún no hay compras registradas para calcular el Top Productos.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Columna 2: Últimas Ventas #}
+    <div class="col-lg-4 col-md-12">
+        <div class="card p-4 shadow-sm border-0 h-100 d-flex flex-column" style="border-radius: 20px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-indigo-900">
+                    <i class="bi bi-bag-check text-indigo-600 me-2"></i>Últimas Ventas
+                </h5>
+                <a href="{{ base_url }}/sells" class="small text-decoration-none fw-semibold text-indigo-600">
+                    Ver todas <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+
+            {% if latest_sales is not empty %}
+                <div class="list-group list-group-flush flex-grow-1">
+                    {% for sale in latest_sales %}
+                        <div class="list-group-item px-0 py-2 border-0 border-bottom">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="d-flex align-items-center gap-1 mb-1">
+                                        <span class="fw-bold text-dark small">#{{ sale.id }}</span>
+                                        <span class="text-muted small">· {{ sale.created_at }}</span>
+                                    </div>
+                                    <div class="small fw-semibold text-indigo-900 text-truncate" style="max-width: 170px;" title="{{ sale.client_name }}">
+                                        {{ sale.client_name }}
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-dark small mb-1">{{ sale.total_formatted }}</div>
+                                    <span class="badge {{ sale.status_class }} rounded-pill small" style="font-size: 10px;">
+                                        <i class="bi {{ sale.status_icon }}"></i> {{ sale.status_name }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted my-auto">
+                    <i class="bi bi-receipt display-4 text-muted opacity-50 mb-2"></i>
+                    <p class="small mb-0">No se encontraron ventas recientes.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Columna 3: Últimos Clientes #}
+    <div class="col-lg-4 col-md-12">
+        <div class="card p-4 shadow-sm border-0 h-100 d-flex flex-column" style="border-radius: 20px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0 text-indigo-900">
+                    <i class="bi bi-people text-indigo-600 me-2"></i>Nuevos Clientes
+                </h5>
+                <a href="{{ base_url }}/clients" class="small text-decoration-none fw-semibold text-indigo-600">
+                    Ver todos <i class="bi bi-chevron-right"></i>
+                </a>
+            </div>
+
+            {% if latest_clients is not empty %}
+                <div class="list-group list-group-flush flex-grow-1">
+                    {% for client in latest_clients %}
+                        <div class="list-group-item px-0 py-2 border-0 border-bottom d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center text-truncate me-2">
+                                <div class="avatar text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3 shadow-sm flex-shrink-0"
+                                     style="width: 38px; height: 38px; background-color: {{ client.color }}; font-size: 13px;">
+                                    {{ client.initials }}
+                                </div>
+                                <div class="text-truncate">
+                                    <div class="fw-bold text-dark small text-truncate">{{ client.fullname }}</div>
+                                    <div class="text-muted small text-truncate" style="font-size: 11px;">{{ client.email }}</div>
+                                </div>
+                            </div>
+                            <div class="text-end flex-shrink-0">
+                                {% if client.is_active %}
+                                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill" style="font-size: 10px;">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-secondary text-white rounded-pill" style="font-size: 10px;">Inactivo</span>
+                                {% endif %}
+                                <div class="text-muted mt-1" style="font-size: 10px;">{{ client.created_at }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5 text-muted my-auto">
+                    <i class="bi bi-person-x display-4 text-muted opacity-50 mb-2"></i>
+                    <p class="small mb-0">No hay clientes registrados aún.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Gráfica de Ventas (Últimos 30 Días)
+    const salesCtx = document.getElementById('salesChart');
+    if (salesCtx) {
+        const labels = {{ sales_chart.labels_json|raw }};
+        const totals = {{ sales_chart.totals_json|raw }};
+        const orders = {{ sales_chart.orders_json|raw }};
+
+        const ctx = salesCtx.getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.00)');
+
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ventas ({{ coin }})',
+                    data: totals,
+                    borderColor: '#6366f1',
+                    borderWidth: 2.5,
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: '#6366f1',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 3.5,
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e1b4b',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e7ff',
+                        padding: 12,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function(context) {
+                                const idx = context.dataIndex;
+                                const val = context.parsed.y || 0;
+                                const ord = orders[idx] || 0;
+                                return [' Monto: {{ coin }} ' + val.toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2}), ' Pedidos: ' + ord];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 15,
+                            color: '#64748b',
+                            font: { family: "'Outfit', sans-serif", size: 11 }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(226, 232, 240, 0.6)',
+                            borderDash: [4, 4]
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: "'Outfit', sans-serif", size: 11 },
+                            callback: function(value) {
+                                return '{{ coin }} ' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. Gráfica Top Productos (Pie / Doughnut)
+    const topCtx = document.getElementById('topProductsChart');
+    if (topCtx) {
+        const topLabels = {{ top_products.labels_json|raw }};
+        const topData = {{ top_products.data_json|raw }};
+        const topColors = {{ top_products.colors_json|raw }};
+
+        new Chart(topCtx, {
+            type: 'doughnut',
+            data: {
+                labels: topLabels,
+                datasets: [{
+                    data: topData,
+                    backgroundColor: topColors,
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e1b4b',
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed || 0;
+                                return ' ' + context.label + ': ' + val + ' unidades';
+                            }
+                        }
+                    }
+                },
+                cutout: '68%'
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

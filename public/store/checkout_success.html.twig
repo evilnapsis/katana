@@ -1,0 +1,30 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Pedido Confirmado{% endblock %}
+
+{% block content %}
+<div class="container-xl py-6">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow-lg border-0 text-center" style="border-radius: 1.5rem;">
+        <div class="card-body p-5">
+          <div class="avatar avatar-xl bg-emerald-100 text-emerald-700 mb-3 mx-auto rounded-circle d-flex align-items-center justify-content-center" style="width:80px; height:80px;">
+            <i class="bi bi-check-circle-fill fs-1"></i>
+          </div>
+          <h2 class="fw-bold text-indigo-900 mb-2">¡Gracias por tu compra!</h2>
+          <p class="text-muted mb-1">Tu pedido <strong>#{{ buy.id }}</strong> fue registrado con folio <strong>{{ buy.code }}</strong>.</p>
+          <p class="text-muted mb-4">Te notificaremos por correo cuando cambie de estado.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <a href="{{ base_url }}/" class="btn btn-primary px-4 rounded-pill">
+              <i class="bi bi-shop me-2"></i> Seguir Comprando
+            </a>
+            <a href="{{ base_url }}/account" class="btn btn-outline-secondary px-4 rounded-pill">
+              Ver Mis Compras
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

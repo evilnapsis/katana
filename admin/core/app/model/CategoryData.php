@@ -1,63 +1,42 @@
 <?php
-class CategoryData {
+class CategoryData extends LbModel {
 	public static $tablename = "category";
 
-	public $id, $name, $short_name, $is_active, $in_home, $in_menu;
+	public $id, $image, $name, $short_name, $in_home, $in_menu, $is_active;
 
 	public function __construct(){
 		$this->name = "";
 		$this->short_name = "";
-		$this->is_active = "1";
+		$this->in_home = 0;
+		$this->in_menu = 0;
+		$this->is_active = 1;
 	}
 
-	public function add(){
-		$sql = "insert into ".self::$tablename." (name,short_name,is_active) ";
-		$sql .= "value (\"$this->name\",\"$this->short_name\",$this->is_active)";
-		Executor::doit($sql);
+	public static function getAll(): array {
+		$db = static::getDb();
+		$stmt = $db->query("select * from ".self::$tablename." order by name asc");
+		return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
 	}
 
-	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
-		Executor::doit($sql);
-	}
-	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
-		Executor::doit($sql);
+	public static function getPublics(): array {
+		$db = static::getDb();
+		$stmt = $db->query("select * from ".self::$tablename." where is_active = 1 order by name asc");
+		return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
 	}
 
-	public function update(){
-		$sql = "update ".self::$tablename." set name=\"$this->name\",short_name=\"$this->short_name\",is_active=\"$this->is_active\" where id=$this->id";
-		Executor::doit($sql);
+	public static function getPublicsRoot(): array {
+		return static::getPublics();
 	}
 
-	public static function getById($id){
-		$sql = "select * from ".self::$tablename." where id=$id";
-		$query = Executor::doit($sql);
-		return Model::one($query[0],new CategoryData());
+	public static function getAllRoot(): array {
+		return static::getAll();
 	}
 
-	public static function getAll(){
-		$sql = "select * from ".self::$tablename;
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new CategoryData());
+	public static function getByPreffix(string $shortName) {
+		$db = static::getDb();
+		$stmt = $db->prepare("select * from ".self::$tablename." where short_name = :s limit 1");
+		$stmt->execute(['s' => $shortName]);
+		$stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
+		return $stmt->fetch() ?: null;
 	}
-	
-	public static function getLike($q){
-		$sql = "select * from ".self::$tablename." where name like '%$q%'";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new CategoryData());
-	}
-	public static function getPublics(){
-		$sql = "select * from ".self::$tablename." where is_active=1";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new CategoryData());
-	}
-	public static function getByPreffix($id){
-		$sql = "select * from ".self::$tablename." where short_name=\"$id\"";
-		$query = Executor::doit($sql);
-		return Model::one($query[0],new CategoryData());
-	}
-
-
 }
-?>

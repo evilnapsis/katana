@@ -1,0 +1,59 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Registro de Clientes{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+  <div class="row">
+    <div class="col-md-7">
+      <h3>Regístrate para poder participar y comprar!</h3>
+      <p>Si gustas participar en preguntas o deseas comprar, es requerimiento obligatorio registrarse utilizando el formulario de la derecha y ofrecer datos fidedignos.</p>
+    </div>
+    <div class="col-md-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white">REGISTRO DE CLIENTES</div>
+        <div class="card-body">
+          {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+          <form method="post" action="{{ base_url }}/register">
+            {{ csrf_field() }}
+            <div class="mb-3">
+              <label class="form-label">*Nombre</label>
+              <input type="text" required name="name" class="form-control" placeholder="Nombre">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">*Apellido</label>
+              <input type="text" required name="lastname" class="form-control" placeholder="Apellido">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Telefono</label>
+              <input type="text" name="phone" class="form-control" placeholder="Telefono">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Direccion</label>
+              <input type="text" name="address" class="form-control" placeholder="Direccion">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">*Correo Electronico</label>
+              <input type="email" name="email" required class="form-control" placeholder="Correo Electronico">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">*Contraseña</label>
+              <input type="password" required name="password" class="form-control" placeholder="Contraseña">
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" name="accept" required class="form-check-input" id="accept">
+              <label class="form-check-label" for="accept">Acepto terminos y condiciones de uso</label>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Registrarme</button>
+            </div>
+          </form>
+          <p class="text-muted small mt-3 mb-0">* Campos obligatorios</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

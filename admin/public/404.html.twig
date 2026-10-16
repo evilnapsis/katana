@@ -1,0 +1,12 @@
+{% extends "layouts/main.html.twig" %}
+
+{% block title %}Página No Encontrada{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-1 fw-bold text-danger">404</h1>
+    <h2>Página no encontrada</h2>
+    <p class="lead">La ruta que intentas consultar no existe o fue movida.</p>
+    <a href="{{ base_url }}/" class="btn btn-primary mt-3">Volver al Inicio</a>
+</div>
+{% endblock %}

@@ -1,24 +1,17 @@
 <?php
+// Core database and model includes
+include __DIR__ . "/controller/Database.php";
+include __DIR__ . "/controller/Model.php";
+include __DIR__ . "/controller/LbModel.php";
+include __DIR__ . "/controller/Extra.php";
 
-include "controller/Core.php";
-include "controller/View.php";
-//include "controller/Module.php"; // Renamed to Layout
-include "controller/Database.php";
-include "controller/Executor.php";
+// Third-party upload utility
+include __DIR__ . "/controller/class.upload.php";
 
-// 10 octubre 2014
-include "controller/Lb.php";
-include "controller/Model.php";
-include "controller/Bootload.php";
-include "controller/Action.php";
-
-include "controller/class.upload.php";
-
-// 6 Agosto 2022
-include "controller/Extra.php";
-include "controller/Layout.php";
-// 8 Agosto 2022
-include "controller/FormTool.php";
-include "controller/TableTool.php";
-
+// Modern LegoBox v5 core controllers
+include __DIR__ . "/controller/Session.php";
+include __DIR__ . "/controller/Request.php";
+include __DIR__ . "/controller/Response.php";
+include __DIR__ . "/controller/ViewEngine.php";
+include __DIR__ . "/app/autoload.php";
 ?>

@@ -1,16 +1,16 @@
 <?php
-class SettingData {
+class SettingData extends LbModel {
 	public static $tablename = "setting";
-
-	public $id, $name, $label, $val, $is_active, $kind, $cfg_id;
+	public $id, $name, $label, $kind, $val, $cfg_id;
 
 
 	public function __consruct(){
-		$this->id = null;
-		$this->name = "";
-		$this->label = "";
-		$this->val = "";
-		$this->is_active = "";
+		$this->title = "";
+		$this->content = "";
+		$this->image = "";
+		$this->user_id = "";
+		$this->is_public = "0";
+		$this->created_at = "NOW()";
 	}
 
 	public function add(){

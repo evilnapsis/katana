@@ -1,0 +1,151 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Mi Carrito de Compras{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2 fw-bold text-indigo-900 mb-1">
+        <i class="bi bi-cart3 text-indigo-600 me-2"></i> Mi Carrito de Compras
+      </h1>
+      <p class="text-muted small mb-0">Revisa tus artículos seleccionados antes de finalizar tu compra.</p>
+    </div>
+    <a href="{{ base_url }}/" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+      <i class="bi bi-arrow-left me-2"></i> Seguir Comprando
+    </a>
+  </div>
+
+  {% for type, message in flashes %}
+    <div class="alert alert-{{ type == 'error' ? 'danger' : 'success' }} alert-dismissible fade show shadow-sm" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+
+  {% if items|length > 0 %}
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow: hidden;">
+          <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <span class="fw-bold"><i class="bi bi-box-seam me-2 text-indigo-400"></i> Productos en el Carrito</span>
+            <span class="badge bg-secondary rounded-pill">{{ items|length }} productos</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                  <tr>
+                    <th class="ps-3">Producto</th>
+                    <th class="text-center" style="width: 130px;">Cantidad</th>
+                    <th class="text-end">Precio U.</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-center pe-3" style="width: 60px;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in items %}
+                  {% set p = item.product %}
+                  <tr>
+                    <td class="ps-3">
+                      <div class="d-flex align-items-center">
+                        <img src="{{ legacy_public_url }}/{{ item.image }}" class="avatar avatar-md me-3 rounded border p-1" style="object-fit: contain; width: 48px; height: 48px;" alt="{{ p.name }}">
+                        <div>
+                          <div class="fw-bold text-indigo-900">{{ p.name }}</div>
+                          <div class="text-muted small">Cód: {{ p.code }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <form method="post" action="{{ base_url }}/cart/item/{{ p.id }}/update" onchange="this.submit()">
+                        {{ csrf_field() }}
+                        <input type="number" min="1" name="q" value="{{ item.q }}" class="form-control form-control-sm text-center shadow-none border">
+                      </form>
+                    </td>
+                    <td class="text-end text-muted">{{ coin }} {{ p.price|number_format(2) }}</td>
+                    <td class="text-end fw-bold text-indigo-900">{{ coin }} {{ item.subtotal|number_format(2) }}</td>
+                    <td class="text-center pe-3">
+                      <a href="{{ base_url }}/cart/item/{{ p.id }}/remove" class="btn btn-icon btn-sm btn-outline-danger shadow-sm" title="Eliminar ítem">
+                        <i class="bi bi-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+          <div class="card-header bg-dark text-white py-3">
+            <span class="fw-bold"><i class="bi bi-receipt me-2 text-indigo-400"></i> Resumen del Pedido</span>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Subtotal</span>
+              <span class="fw-bold">{{ coin }} {{ subtotal|number_format(2) }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">{{ iva_txt }} ({{ iva }}%)</span>
+              <span class="fw-bold">{{ coin }} {{ iva_amount|number_format(2) }}</span>
+            </div>
+
+            <hr class="my-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="h4 mb-0 fw-bold text-indigo-900">Total</span>
+              <span class="h2 mb-0 text-emerald-700 fw-bold">{{ coin }} {{ total|number_format(2) }}</span>
+            </div>
+
+            {% if session.client_id %}
+              <form action="{{ base_url }}/checkout" method="post" class="mt-4">
+                {{ csrf_field() }}
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-indigo-900">Método de Pago</label>
+                  <select class="form-select shadow-none" required name="paymethod_id">
+                    {% for pay in paymethods %}
+                      <option value="{{ pay.id }}">{{ pay.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary btn-lg shadow-sm py-3 text-white fw-bold" style="border-radius: 12px;">
+                    Proceder a Pagar <i class="bi bi-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </form>
+            {% else %}
+              <div class="d-grid mt-4">
+                <a href="{{ base_url }}/login" class="btn btn-outline-primary btn-lg shadow-sm py-3 fw-bold" style="border-radius: 12px;">
+                  <i class="bi bi-box-arrow-in-right me-2"></i> Inicia sesión para pagar
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="mt-4 text-center">
+              <a href="{{ base_url }}/cart/clear" class="btn btn-link link-danger text-decoration-none small" onclick="return confirm('¿Seguro que deseas vaciar el carrito?')">
+                <i class="bi bi-trash me-2"></i> Vaciar Carrito
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="card shadow-sm border-0 bg-light bg-opacity-50">
+      <div class="card-body text-center py-6">
+        <div class="avatar avatar-xl bg-indigo-50 text-indigo-600 mb-4 mx-auto rounded-circle d-flex align-items-center justify-content-center" style="width:70px; height:70px;">
+          <i class="bi bi-cart-x fs-1"></i>
+        </div>
+        <h2 class="fw-bold text-indigo-900 mb-2">Tu carrito está vacío</h2>
+        <p class="text-muted mb-4">No has agregado productos al carrito todavía.</p>
+        <a href="{{ base_url }}/" class="btn btn-primary btn-lg px-5 shadow-sm rounded-pill">
+          <i class="bi bi-shop me-2"></i> Ir a la tienda
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

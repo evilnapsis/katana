@@ -1,0 +1,97 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Clientes{% endblock %}
+{% block nav_clients %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-people me-2 text-indigo-600"></i> Directorio de Clientes
+    </h2>
+    <p class="text-muted small mb-0">Gestión de usuarios compradores registrados, datos de contacto y estado de cuentas.</p>
+  </div>
+  <a href="{{ base_url }}/client/new" class="btn btn-indigo rounded-pill px-3 shadow-sm">
+    <i class="bi bi-person-plus me-1"></i> Nuevo Cliente
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-list-task me-2 text-indigo-400"></i> Lista de Clientes</span>
+        <span class="badge bg-secondary rounded-pill">{{ clients|length }} clientes</span>
+      </div>
+      <div class="card-body p-0">
+        {% if clients|length > 0 %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 datatable">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3" style="width: 70px;">ID</th>
+                <th>Cliente</th>
+                <th>Correo Electrónico</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center pe-3" style="width: 120px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in clients %}
+              <tr>
+                <td class="ps-3 fw-bold text-muted small">#{{ c.id }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm rounded-circle bg-indigo-50 text-indigo-700 fw-bold d-flex align-items-center justify-content-center me-2 flex-shrink-0" style="width: 34px; height: 34px; font-size: 12px;">
+                      {{ c.name|slice(0, 1) }}{{ c.lastname|slice(0, 1) }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark">{{ c.getFullname() }}</div>
+                      <div class="text-muted small" style="font-size: 11px;">Registrado: {{ c.created_at|date("d/m/Y") }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><a href="mailto:{{ c.email }}" class="text-decoration-none text-muted small">{{ c.email }}</a></td>
+                <td class="small text-muted">{{ c.phone|default('—') }}</td>
+                <td class="small text-muted text-truncate" style="max-width: 200px;" title="{{ c.address }}">{{ c.address|default('—') }}</td>
+                <td class="text-center">
+                  {% if c.is_active %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill"><i class="bi bi-check-circle"></i> Activo</span>
+                  {% else %}
+                    <span class="badge bg-rose-100 text-rose-700 rounded-pill"><i class="bi bi-x-circle"></i> Inactivo</span>
+                  {% endif %}
+                </td>
+                <td class="text-center pe-3">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ base_url }}/client/{{ c.id }}/edit" class="btn btn-outline-warning" title="Editar cliente">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <form method="post" action="{{ base_url }}/client/{{ c.id }}/delete" style="display:inline" onsubmit="return confirm('¿Estás seguro de eliminar este cliente?')">
+                      {{ csrf_field() }}
+                      <button type="submit" class="btn btn-outline-danger" title="Eliminar cliente" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-5 text-center text-muted">
+          <i class="bi bi-people display-4 text-muted opacity-50 mb-2"></i>
+          <p class="mb-3">No hay clientes registrados aún.</p>
+          <a href="{{ base_url }}/client/new" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+            <i class="bi bi-person-plus me-1"></i> Registrar Primer Cliente
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

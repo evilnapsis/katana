@@ -1,0 +1,92 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Usuarios del Sistema{% endblock %}
+{% block nav_users %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-person-badge me-2 text-indigo-600"></i> Usuarios del Sistema
+    </h2>
+    <p class="text-muted small mb-0">Gestión de cuentas del personal administrativo y permisos de acceso al panel de control.</p>
+  </div>
+  <a href="{{ base_url }}/user/new" class="btn btn-indigo rounded-pill px-3 shadow-sm">
+    <i class="bi bi-person-plus me-1"></i> Nuevo Usuario
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-list-task me-2 text-indigo-400"></i> Lista de Usuarios Administrativos</span>
+        <span class="badge bg-secondary rounded-pill">{{ users|length }} usuarios</span>
+      </div>
+      <div class="card-body p-0">
+        {% if users|length > 0 %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 datatable">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3" style="width: 70px;">ID</th>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>Correo Electrónico</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Rol</th>
+                <th class="text-center pe-3" style="width: 100px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td class="ps-3 fw-bold text-muted small">#{{ u.id }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="avatar avatar-sm rounded-circle bg-indigo-50 text-indigo-700 fw-bold d-flex align-items-center justify-content-center me-2 flex-shrink-0" style="width: 34px; height: 34px; font-size: 12px;">
+                      {{ u.name|slice(0, 1) }}{{ u.lastname|slice(0, 1) }}
+                    </div>
+                    <div class="fw-bold text-dark">{{ u.name }} {{ u.lastname }}</div>
+                  </div>
+                </td>
+                <td><code class="text-indigo-600 bg-indigo-50 px-2 py-1 rounded small">@{{ u.username }}</code></td>
+                <td><a href="mailto:{{ u.email }}" class="text-decoration-none text-muted small">{{ u.email }}</a></td>
+                <td class="text-center">
+                  {% if u.is_active %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill"><i class="bi bi-check-circle"></i> Activo</span>
+                  {% else %}
+                    <span class="badge bg-rose-100 text-rose-700 rounded-pill"><i class="bi bi-x-circle"></i> Inactivo</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if u.is_admin %}
+                    <span class="badge bg-indigo-100 text-indigo-700 rounded-pill"><i class="bi bi-shield-lock-fill"></i> Administrador</span>
+                  {% else %}
+                    <span class="badge bg-light text-secondary border rounded-pill">Operador</span>
+                  {% endif %}
+                </td>
+                <td class="text-center pe-3">
+                  <a href="{{ base_url }}/user/{{ u.id }}/edit" class="btn btn-outline-warning btn-sm rounded-pill px-3" title="Editar usuario">
+                    <i class="bi bi-pencil"></i> Editar
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-5 text-center text-muted">
+          <i class="bi bi-people display-4 text-muted opacity-50 mb-2"></i>
+          <p class="mb-3">No hay usuarios registrados en el sistema.</p>
+          <a href="{{ base_url }}/user/new" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+            <i class="bi bi-person-plus me-1"></i> Agregar Primer Usuario
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Compra #{{ buy.id }}{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Compra #{{ buy.id }}</h2>
+    <div class="btn-group">
+      <a href="{{ base_url }}/account" class="btn btn-secondary"><i class="bi bi-chevron-left"></i> Regresar</a>
+      <a href="{{ legacy_public_url }}/invoice.php?code={{ buy.code }}" target="_blank" class="btn btn-secondary"><i class="bi bi-printer"></i> Imprimir</a>
+    </div>
+  </div>
+
+  {% if buy.status_id == 1 %}
+    <p class="alert alert-warning">Operación Pendiente</p>
+  {% elseif buy.status_id in [2, 4, 5] %}
+    <p class="alert alert-info">{{ buy.getStatus().name }}</p>
+  {% elseif buy.status_id == 3 %}
+    <p class="alert alert-danger">Operación Cancelada</p>
+  {% endif %}
+
+  {% if products|length > 0 %}
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-bordered mb-0">
+          <thead class="table-light">
+            <tr>
+              <th></th>
+              <th>Cantidad</th>
+              <th>Unidad</th>
+              <th>Código</th>
+              <th>Producto</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in products %}
+            <tr>
+              <td><a href="{{ base_url }}/product/{{ row.product.id }}" target="_blank" class="btn btn-outline-secondary btn-sm">Detalles</a></td>
+              <td>{{ row.q }}</td>
+              <td>{{ row.unit ? row.unit.name : '' }}</td>
+              <td>{{ row.product.code }}</td>
+              <td>{{ row.product.name }}</td>
+              <td>{{ coin }} {{ row.line_total|number_format(2, '.', ',') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5 offset-md-7">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body p-0">
+          <table class="table table-bordered mb-0">
+            <tr>
+              <td class="bg-light fw-bold">Subtotal</td>
+              <td class="text-end">{{ coin }} {{ buy.getTotal()|number_format(2, '.', ',') }}</td>
+            </tr>
+            <tr>
+              <td class="bg-light fw-bold">{{ iva_txt }}</td>
+              <td class="text-end">{{ coin }} {{ (buy.getTotal() * (iva / 100))|number_format(2, '.', ',') }}</td>
+            </tr>
+            <tr class="table-success fw-bold">
+              <td>Total</td>
+              <td class="text-end">{{ coin }} {{ total_final|number_format(2, '.', ',') }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      {% if buy.status_id == 1 %}
+      <form method="post" action="{{ base_url }}/account/order/{{ buy.id }}/cancel" onsubmit="return confirm('¿Seguro que deseas cancelar esta compra?')">
+        {{ csrf_field() }}
+        <button type="submit" class="btn btn-danger w-100">Cancelar Compra</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if bank_info %}
+  <h4 class="mt-4">Datos del depósito bancario</h4>
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <table class="table table-bordered mb-0">
+        <thead class="table-light"><tr><th>Clave</th><th>Valor</th></tr></thead>
+        <tr><td>{{ bank_info.titular.label }}</td><td>{{ bank_info.titular.val }}</td></tr>
+        <tr><td>{{ bank_info.name.label }}</td><td>{{ bank_info.name.val }}</td></tr>
+        <tr><td>{{ bank_info.account.label }}</td><td>{{ bank_info.account.val }}</td></tr>
+        <tr><td>{{ bank_info.card.label }}</td><td>{{ bank_info.card.val }}</td></tr>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

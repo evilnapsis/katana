@@ -1,0 +1,119 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Productos{% endblock %}
+{% block nav_products %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-box-seam me-2 text-indigo-600"></i> Catálogo de Productos
+    </h2>
+    <p class="text-muted small mb-0">Administración de inventario, precios, visibilidad y galerías de imágenes.</p>
+  </div>
+  <a href="{{ base_url }}/product/new" class="btn btn-indigo rounded-pill px-3 shadow-sm">
+    <i class="bi bi-plus-lg me-1"></i> Nuevo Producto
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-list-task me-2 text-indigo-400"></i> Lista de Productos</span>
+        <span class="badge bg-secondary rounded-pill">{{ products|length }} artículos</span>
+      </div>
+      <div class="card-body p-0">
+        {% if products|length > 0 %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 datatable">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3">Código</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th class="text-center">Visible</th>
+                <th class="text-center">Destacado</th>
+                <th class="text-center">Existencia</th>
+                <th class="text-center pe-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in products %}
+              <tr>
+                <td class="ps-3 fw-semibold text-muted small">{{ p.code|default('—') }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {% if p.image %}
+                      <img src="{{ base_url }}/../storage/products/{{ p.image }}" alt="{{ p.name }}" class="rounded me-2 border" style="width: 36px; height: 36px; object-fit: cover;">
+                    {% else %}
+                      <div class="rounded me-2 bg-light border d-flex align-items-center justify-content-center text-muted" style="width: 36px; height: 36px;">
+                        <i class="bi bi-image" style="font-size: 14px;"></i>
+                      </div>
+                    {% endif %}
+                    <div>
+                      <div class="fw-bold text-dark">{{ p.name }}</div>
+                      <div class="text-muted small" style="font-size: 11px;">ID: #{{ p.id }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-light text-secondary border rounded-pill">
+                    {{ categories[p.category_id] is defined ? categories[p.category_id].name : 'Sin categoría' }}
+                  </span>
+                </td>
+                <td class="fw-bold text-indigo-900">$ {{ p.price|number_format(2) }}</td>
+                <td class="text-center">
+                  {% if p.is_public %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill"><i class="bi bi-check-circle"></i> Sí</span>
+                  {% else %}
+                    <span class="badge bg-rose-100 text-rose-700 rounded-pill"><i class="bi bi-x-circle"></i> No</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if p.is_featured %}
+                    <span class="badge bg-amber-100 text-amber-700 rounded-pill"><i class="bi bi-star-fill"></i> Sí</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted border rounded-pill">No</span>
+                  {% endif %}
+                </td>
+                <td class="text-center">
+                  {% if p.in_existence %}
+                    <span class="badge bg-emerald-100 text-emerald-700 rounded-pill"><i class="bi bi-box"></i> En stock</span>
+                  {% else %}
+                    <span class="badge bg-rose-100 text-rose-700 rounded-pill"><i class="bi bi-slash-circle"></i> Agotado</span>
+                  {% endif %}
+                </td>
+                <td class="text-center pe-3">
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{{ base_url }}/product/{{ p.id }}/edit" class="btn btn-outline-warning" title="Editar producto">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <form method="post" action="{{ base_url }}/product/{{ p.id }}/delete" style="display:inline" onsubmit="return confirm('¿Estás seguro de eliminar este producto?')">
+                      {{ csrf_field() }}
+                      <button type="submit" class="btn btn-outline-danger" title="Eliminar producto" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="p-5 text-center text-muted">
+          <i class="bi bi-box display-4 text-muted opacity-50 mb-2"></i>
+          <p class="mb-3">Aún no hay productos registrados en el catálogo.</p>
+          <a href="{{ base_url }}/product/new" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i> Agregar Primer Producto
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,106 +1,50 @@
 <?php
-class BuyData {
+class BuyData extends LbModel {
 	public static $tablename = "buy";
 
-	public $id, $k, $code, $coupon_id, $client_id, $created_at, $paymethod_id, $status_id, $name, $c;
+	public $id, $k, $code, $client_id, $status_id, $created_at, $paymethod_id;
 
 	public function __construct(){
-		$this->id = null;
-		$this->k = "";
-		$this->code = "";
-		$this->coupon_id = "null";
-		$this->client_id = "";
 		$this->created_at = "NOW()";
-		$this->paymethod_id = "";
-		$this->status_id = "";
 	}
 
-	public function getStatus(){ return StatusData::getById($this->status_id);}
-	public function getClient(){ return ClientData::getById($this->client_id);}
-	public function getPaymethod(){ return PaymethodData::getById($this->paymethod_id);}
+	public function getStatus() { return StatusData::find($this->status_id); }
+	public function getClient() { return ClientData::find($this->client_id); }
+	public function getPaymethod() { return PaymethodData::find($this->paymethod_id); }
 
-	public function add(){
-		$sql = "insert into ".self::$tablename." (k,code,coupon_id,client_id,created_at,paymethod_id,status_id) ";
-		$sql .= "value (\"$this->k\",\"$this->code\",$this->coupon_id,\"$this->client_id\",$this->created_at,$this->paymethod_id,$this->status_id)";
-		return Executor::doit($sql);
-	}
-
-	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
-		Executor::doit($sql);
-	}
-	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
-		Executor::doit($sql);
-	}
-
-	public function update(){
-		$sql = "update ".self::$tablename." set name=\"$this->name\" where id=$this->id";
-		Executor::doit($sql);
-	}
-
-	public function cancel(){
-		$sql = "update ".self::$tablename." set status_id=3 where id=$this->id";
-		Executor::doit($sql);
-	}
-
-	public function change_status(){
-		$sql = "update ".self::$tablename." set status_id=\"$this->status_id\" where id=$this->id";
-		Executor::doit($sql);
-	}
-
-	public static function getById($id){
-		$sql = "select * from ".self::$tablename." where id=$id";
-		$query = Executor::doit($sql);
-		return Model::one($query[0],new BuyData());
-	}
-
-	public static function countByStatusId($id){
-		$sql = "select count(*) as c from ".self::$tablename." where status_id=$id";
-		$query = Executor::doit($sql);
-		return Model::one($query[0],new BuyData());
-	}
-
-	public static function getByCode($id){
-		$sql = "select * from ".self::$tablename." where code=\"$id\"";
-		$query = Executor::doit($sql);
-		return Model::one($query[0],new BuyData());
-	}
-
-	public static function getAll(){
-		$sql = "select * from ".self::$tablename." order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new BuyData());
-	}
-
-	public static function getAllByDate($date){
-		$sql = "select * from ".self::$tablename." where date(created_at)=\"$date\"";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new BuyData());
-	}
-
-	public static function getByRange($start,$end){
-		$sql = "select * from ".self::$tablename." where (created_at>=\"$start\" and created_at<=\"$end\") order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new BuyData());
-	}
-
-	public  function getTotal(){
+	public function getTotal(): float {
 		$products = BuyProductData::getAllByBuyId($this->id);
-		$total=0;
-		foreach ($products as $px) {
-			$p = ProductData::getById($px->product_id);
-			$total+=$p->price*$px->q;
+		$total = 0;
+		foreach ($products as $bp) {
+			$p = $bp->getProduct();
+			if ($p) $total += $p->price * $bp->q;
 		}
 		return $total;
 	}
 
-	public static function getAllByClientId($id){
-		$sql = "select * from ".self::$tablename." where client_id=$id order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new BuyData());
+	public function changeStatus(int $statusId): bool {
+		$this->status_id = $statusId;
+		return $this->save();
 	}
 
-}
+	public static function getAll(): array {
+		$db = static::getDb();
+		$stmt = $db->query("select * from ".self::$tablename." order by created_at desc");
+		return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
+	}
 
-?>
+	public static function getAllByClientId($id): array {
+		$db = static::getDb();
+		$stmt = $db->prepare("select * from ".self::$tablename." where client_id = :id order by created_at desc");
+		$stmt->execute(['id' => $id]);
+		return $stmt->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
+	}
+
+	public static function getByCode(string $code) {
+		$db = static::getDb();
+		$stmt = $db->prepare("select * from ".self::$tablename." where code = :code limit 1");
+		$stmt->execute(['code' => $code]);
+		$stmt->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, static::class);
+		return $stmt->fetch() ?: null;
+	}
+}

@@ -1,0 +1,155 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Mi Cuenta{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 16px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
+    <div class="card-body p-4 text-white">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <div class="d-flex align-items-center justify-content-center rounded-circle shadow-sm" style="width:72px; height:72px; background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: #ffffff;">
+            <i class="bi bi-person-fill" style="font-size: 2.2rem; color: #ffffff;"></i>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-inline-block px-3 py-1 rounded-pill mb-2 fw-bold" style="background-color: rgba(255, 255, 255, 0.2); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 12px; letter-spacing: 0.5px;">
+            <i class="bi bi-person-badge me-1"></i> MI PERFIL DE CLIENTE
+          </div>
+          <h1 class="h2 fw-bold text-white mb-1">{{ client.name }} {{ client.lastname }}</h1>
+          <div class="d-flex flex-wrap gap-3 small text-white-50">
+            <span><i class="bi bi-envelope me-1"></i> {{ client.email }}</span>
+            {% if client.phone %}<span><i class="bi bi-telephone me-1"></i> {{ client.phone }}</span>{% endif %}
+            {% if client.address %}<span><i class="bi bi-geo-alt me-1"></i> {{ client.address }}</span>{% endif %}
+          </div>
+        </div>
+        <div class="col-auto mt-3 mt-md-0">
+          <a href="{{ base_url }}/logout" class="btn btn-outline-light btn-sm rounded-pill px-3">
+            <i class="bi bi-box-arrow-right me-1"></i> Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cards mb-4 g-3">
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm bg-white h-100 p-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Total de Compras</div>
+            <div class="h2 mb-0 fw-bold text-indigo-900">{{ total_orders }}</div>
+          </div>
+          <span class="avatar avatar-md bg-indigo-100 text-indigo-700 rounded-circle">
+            <i class="bi bi-bag-check-fill fs-4"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm bg-white h-100 p-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Total Invertido</div>
+            <div class="h2 mb-0 fw-bold text-emerald-700">{{ coin }} {{ total_spent|number_format(2) }}</div>
+          </div>
+          <span class="avatar avatar-md bg-emerald-100 text-emerald-700 rounded-circle">
+            <i class="bi bi-currency-dollar fs-4"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm bg-white h-100 p-3">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Pedidos en Curso</div>
+            <div class="h2 mb-0 fw-bold text-amber-700">{{ active_orders }}</div>
+          </div>
+          <span class="avatar avatar-md bg-amber-100 text-amber-700 rounded-circle">
+            <i class="bi bi-truck fs-4"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+    <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+      <span class="fw-bold"><i class="bi bi-clock-history me-2 text-indigo-400"></i> Historial de Mis Compras</span>
+      <a href="{{ base_url }}/products" class="btn btn-primary btn-sm rounded-pill"><i class="bi bi-shop me-1"></i> Seguir Comprando</a>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        {% if rows|length > 0 %}
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light text-muted small text-uppercase">
+            <tr>
+              <th class="ps-3">Acciones</th>
+              <th>Orden</th>
+              <th>Subtotal</th>
+              <th>Descuento</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Método de Pago</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            {% set buy = row.buy %}
+            <tr>
+              <td class="ps-3">
+                <div class="btn-group shadow-sm" role="group">
+                  <a href="{{ base_url }}/account/order/{{ buy.code }}" class="btn btn-sm btn-outline-primary" title="Ver Detalles"><i class="bi bi-eye me-1"></i> Detalles</a>
+                  <a target="_blank" href="{{ legacy_public_url }}/invoice.php?code={{ buy.code }}" class="btn btn-sm btn-outline-secondary" title="Imprimir Comprobante"><i class="bi bi-printer"></i></a>
+                </div>
+              </td>
+              <td class="fw-bold text-indigo-900">#{{ buy.id }}</td>
+              <td>{{ coin }} {{ buy.getTotal()|number_format(2, '.', ',') }}</td>
+              <td>
+                {% if row.discount_pct > 0 %}
+                  <span class="badge bg-amber-100 text-amber-700">{{ row.discount_pct|number_format(2) }}%</span>
+                {% else %}
+                  <span class="text-muted small">0%</span>
+                {% endif %}
+              </td>
+              <td class="fw-bold text-emerald-700">{{ coin }} {{ row.total_final|number_format(2, '.', ',') }}</td>
+              <td>
+                {% if buy.status_id == 1 %}
+                  <span class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i class="bi bi-clock-history me-1"></i> Pendiente</span>
+                {% elseif buy.status_id == 2 %}
+                  <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill"><i class="bi bi-currency-dollar me-1"></i> Pagado</span>
+                {% elseif buy.status_id == 3 %}
+                  <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill"><i class="bi bi-x-lg me-1"></i> Cancelado</span>
+                {% elseif buy.status_id == 4 %}
+                  <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill"><i class="bi bi-truck me-1"></i> Enviado</span>
+                {% elseif buy.status_id == 5 %}
+                  <span class="badge bg-emerald-100 text-emerald-700 px-3 py-2 rounded-pill"><i class="bi bi-check-lg me-1"></i> Finalizado</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ buy.getStatus().name }}</span>
+                {% endif %}
+              </td>
+              <td><span class="badge bg-light text-dark border">{{ buy.getPaymethod().name }}</span></td>
+              <td class="small text-muted">{{ buy.created_at|date('Y-m-d H:i') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="p-5 text-center bg-light">
+          <div class="avatar avatar-xl bg-indigo-50 text-indigo-600 mb-3 mx-auto rounded-circle d-flex align-items-center justify-content-center" style="width:70px; height:70px;">
+            <i class="bi bi-bag-x fs-1"></i>
+          </div>
+          <h4 class="fw-bold text-indigo-900 mb-1">Aún no has realizado compras</h4>
+          <p class="text-muted small mb-4">Descubre nuestros productos destacados y realiza tu primer pedido hoy mismo.</p>
+          <a href="{{ base_url }}/products" class="btn btn-primary shadow-sm px-4 rounded-pill">
+            <i class="bi bi-shop me-2"></i> Ver Catálogo de Productos
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

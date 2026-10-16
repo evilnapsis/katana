@@ -1,0 +1,189 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Pedidos{% endblock %}
+{% block nav_sells %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-0">
+      <i class="bi bi-cart-check me-2 text-indigo-600"></i> Control de Pedidos y Ventas
+    </h2>
+    <p class="text-muted small mb-0">Gestión de órdenes recibidas, estados de procesamiento e impresión de comprobantes.</p>
+  </div>
+  <div class="text-end">
+    <div class="small text-muted text-uppercase fw-bold">Monto Acumulado (Ventas Activas)</div>
+    <div class="h3 fw-bold text-emerald-700 mb-0">{{ coin }} {{ sum_total|number_format(2) }}</div>
+  </div>
+</div>
+
+<div class="row row-cards mb-3 g-2">
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-indigo-100 text-indigo-700 rounded me-2"><i class="bi bi-cart-fill"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Total</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-indigo-900">{{ counts.all }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-amber-100 text-amber-700 rounded me-2"><i class="bi bi-clock-history"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Pendientes</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-amber-700">{{ counts.pending }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-info bg-opacity-10 text-info rounded me-2"><i class="bi bi-currency-dollar"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Pagados</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-info">{{ counts.paid }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-primary bg-opacity-10 text-primary rounded me-2"><i class="bi bi-truck"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Enviados</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-primary">{{ counts.shipped }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-emerald-100 text-emerald-700 rounded me-2"><i class="bi bi-check-circle-fill"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Finalizados</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-emerald-700">{{ counts.finished }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-sm-4 col-xl-2">
+    <div class="card border-0 shadow-sm bg-white p-2">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="avatar avatar-xs bg-danger bg-opacity-10 text-danger rounded me-2"><i class="bi bi-x-circle-fill"></i></span>
+          <span class="text-uppercase text-muted fw-bold small" style="font-size: 11px;">Cancelados</span>
+        </div>
+        <span class="h4 mb-0 fw-bold text-danger">{{ counts.canceled }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-list-task me-2 text-indigo-400"></i> Historial de Ventas</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          {% if rows|length > 0 %}
+          <table class="table table-hover align-middle mb-0 datatable">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3">Acciones</th>
+                <th>Folio</th>
+                <th>Cliente</th>
+                <th>Descuento</th>
+                <th>Total</th>
+                <th>Método Pago</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th class="text-center pe-3">Cambiar Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in rows %}
+              {% set b = row.buy %}
+              <tr>
+                <td class="ps-3">
+                  <div class="btn-group shadow-sm" role="group">
+                    <a href="{{ base_url }}/sell/{{ b.id }}" class="btn btn-sm btn-outline-indigo" title="Ver Detalles"><i class="bi bi-eye"></i></a>
+                    <a target="_blank" href="{{ legacy_admin_url }}/../invoice.php?code={{ b.code }}" class="btn btn-sm btn-outline-secondary" title="Imprimir Ticket"><i class="bi bi-printer"></i></a>
+                  </div>
+                </td>
+                <td class="fw-bold text-indigo-900">#{{ b.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ b.getClient() ? b.getClient().getFullname() : 'N/A' }}</div>
+                  <div class="text-muted small">{{ b.getClient() ? b.getClient().email : '' }}</div>
+                </td>
+                <td>
+                  {% if row.discount_pct > 0 %}
+                    <span class="badge bg-amber-100 text-amber-700">{{ row.discount_pct|number_format(2) }}%</span>
+                  {% else %}
+                    <span class="text-muted small">0%</span>
+                  {% endif %}
+                </td>
+                <td class="fw-bold text-indigo-900">{{ coin }} {{ row.total_final|number_format(2, '.', ',') }}</td>
+                <td><span class="badge bg-light text-dark border">{{ b.getPaymethod() ? b.getPaymethod().name : 'N/A' }}</span></td>
+                <td>
+                  {% if b.status_id == 1 %}
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill"><i class="bi bi-clock-history me-1"></i> Pendiente</span>
+                  {% elseif b.status_id == 2 %}
+                    <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill"><i class="bi bi-currency-dollar me-1"></i> Pagado</span>
+                  {% elseif b.status_id == 3 %}
+                    <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill"><i class="bi bi-x-lg me-1"></i> Cancelado</span>
+                  {% elseif b.status_id == 4 %}
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill"><i class="bi bi-truck me-1"></i> Enviado</span>
+                  {% elseif b.status_id == 5 %}
+                    <span class="badge bg-emerald-100 text-emerald-700 px-3 py-2 rounded-pill"><i class="bi bi-check-lg me-1"></i> Finalizado</span>
+                  {% else %}
+                    <span class="badge bg-secondary">{{ b.getStatus().name }}</span>
+                  {% endif %}
+                </td>
+                <td class="small text-muted">{{ b.created_at|date('Y-m-d H:i') }}</td>
+                <td class="text-center pe-3">
+                  <div class="btn-group shadow-sm" role="group">
+                    {% if b.status_id != 3 %}
+                      <a href="{{ base_url }}/sell/{{ b.id }}/history" class="btn btn-outline-secondary btn-sm" title="Historial"><i class="bi bi-clock-history"></i></a>
+                      {% if b.status_id != 5 %}
+                        {% for target in [{s: 2, cls: 'info', icon: 'currency-dollar', title: 'Marcar Pagado'}, {s: 4, cls: 'primary', icon: 'truck', title: 'Marcar Enviado'}, {s: 5, cls: 'success', icon: 'check-lg', title: 'Finalizar'}, {s: 3, cls: 'danger', icon: 'x-lg', title: 'Cancelar'}] %}
+                        <form method="post" action="{{ base_url }}/sell/{{ b.id }}/status/{{ target.s }}" style="display:inline">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-outline-{{ target.cls }} btn-sm" title="{{ target.title }}"><i class="bi bi-{{ target.icon }}"></i></button>
+                        </form>
+                        {% endfor %}
+                      {% else %}
+                        <span class="badge bg-emerald-100 text-emerald-700 px-2 py-1"><i class="bi bi-check-lg me-1"></i> Completada</span>
+                      {% endif %}
+                    {% else %}
+                      <span class="badge bg-danger bg-opacity-10 text-danger px-2 py-1"><i class="bi bi-x-lg me-1"></i> Anulada</span>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="p-5 text-center bg-light">
+            <div class="avatar avatar-xl bg-indigo-50 text-indigo-600 mb-3 mx-auto rounded-circle d-flex align-items-center justify-content-center" style="width:70px; height:70px;">
+              <i class="bi bi-cart-x fs-1"></i>
+            </div>
+            <h4 class="fw-bold text-indigo-900 mb-1">No hay pedidos registrados</h4>
+            <p class="text-muted small">Cuando tus clientes realicen compras, aparecerán listadas aquí.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

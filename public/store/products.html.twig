@@ -1,0 +1,39 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="row row-cards">
+    <div class="col-lg-3">
+      {% include "store/_category_sidebar.html.twig" with {nav_categories: nav_categories} %}
+    </div>
+
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title text-uppercase tracking-tight">
+          <i class="bi bi-box-seam text-primary me-2"></i> {{ title }}
+        </h2>
+      </div>
+
+      {% if products|length > 0 %}
+      <div class="row row-cards">
+        {% for item in products %}
+          {% include "store/_product_card.html.twig" with {item: item, coin: coin, show_details: true} %}
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="card bg-indigo-50 border-indigo-100">
+        <div class="card-body text-center py-5">
+          <div class="avatar avatar-xl bg-indigo-100 text-indigo-600 mb-3 mx-auto">
+            <i class="bi bi-info-circle fs-1"></i>
+          </div>
+          <h2 class="h3 fw-bold text-indigo-900">No hay productos</h2>
+          <p class="text-indigo-600">No se encontraron productos para mostrar.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

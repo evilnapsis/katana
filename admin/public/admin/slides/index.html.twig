@@ -1,0 +1,92 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Sliders{% endblock %}
+{% block nav_slides %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-images me-2 text-indigo-600"></i> Gestión del Slider Principal
+    </h2>
+    <p class="text-muted small mb-0">Administra los banners e imágenes promocionales que se muestran en el carrusel de la página de inicio.</p>
+  </div>
+  <div>
+    <a href="{{ base_url }}/slide/new" class="btn btn-primary rounded-pill px-4 shadow-sm">
+      <i class="bi bi-plus-lg me-1"></i> Agregar Slide
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold"><i class="bi bi-card-image me-2 text-indigo-400"></i> Diapositivas Registradas</span>
+        <span class="badge bg-indigo-500 text-white">{{ slides|length }} Slides</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          {% if slides|length > 0 %}
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-muted small text-uppercase">
+              <tr>
+                <th class="ps-3" style="width: 140px;">Vista Previa</th>
+                <th>Título / Nombre</th>
+                <th class="text-center">Estado Visibilidad</th>
+                <th class="text-center pe-3" style="width: 120px;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for slide in slides %}
+              <tr>
+                <td class="ps-3">
+                  {% if slide.image %}
+                    <img src="{{ base_url }}/../storage/slides/{{ slide.image }}" class="rounded border shadow-sm" style="height: 50px; width: 100px; object-fit: cover;">
+                  {% else %}
+                    <div class="bg-light rounded border text-muted small d-flex align-items-center justify-content-center" style="height: 50px; width: 100px;">
+                      <i class="bi bi-image fs-3"></i>
+                    </div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="fw-bold text-indigo-900">{{ slide.title }}</div>
+                </td>
+                <td class="text-center">
+                  {% if slide.is_public %}
+                    <span class="badge bg-emerald-100 text-emerald-700 px-3 py-2 rounded-pill"><i class="bi bi-eye-fill me-1"></i> Visible</span>
+                  {% else %}
+                    <span class="badge bg-secondary bg-opacity-10 text-secondary px-3 py-2 rounded-pill"><i class="bi bi-eye-slash-fill me-1"></i> Oculto</span>
+                  {% endif %}
+                </td>
+                <td class="text-center pe-3">
+                  <div class="btn-group shadow-sm" role="group">
+                    <a href="{{ base_url }}/slide/{{ slide.id }}/edit" class="btn btn-sm btn-outline-warning" title="Editar Slide"><i class="bi bi-pencil"></i></a>
+                    <form method="post" action="{{ base_url }}/slide/{{ slide.id }}/delete" style="display:inline" onsubmit="return confirm('¿Estás seguro de eliminar este slide?')">
+                      {{ csrf_field() }}
+                      <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="p-5 text-center bg-light">
+            <div class="avatar avatar-xl bg-indigo-50 text-indigo-600 mb-3 mx-auto rounded-circle d-flex align-items-center justify-content-center" style="width:70px; height:70px;">
+              <i class="bi bi-images fs-1"></i>
+            </div>
+            <h4 class="fw-bold text-indigo-900 mb-1">No hay slides registrados</h4>
+            <p class="text-muted small mb-4">Agrega banners para destacar tus promociones y productos en la página de inicio.</p>
+            <a href="{{ base_url }}/slide/new" class="btn btn-primary shadow-sm rounded-pill px-4">
+              <i class="bi bi-plus-lg me-1"></i> Agregar Primer Slide
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

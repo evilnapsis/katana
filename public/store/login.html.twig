@@ -1,0 +1,56 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Acceso de Clientes{% endblock %}
+
+{% block content %}
+<div class="container-xl d-flex align-items-center justify-content-center py-6">
+  <div class="row justify-content-center w-100">
+    <div class="col-md-5">
+      <div class="card shadow-lg border-0" style="border-radius: 1.5rem; overflow: hidden;">
+        <div class="card-body p-5">
+          <div class="text-center mb-5">
+            <div class="avatar avatar-xl bg-primary-lt text-primary mb-3 mx-auto shadow-sm">
+              <i class="bi bi-shield-lock fs-1"></i>
+            </div>
+            <h2 class="h2 fw-bold text-dark mb-1">Acceso de Clientes</h2>
+            <p class="text-muted">Ingresa tus credenciales para continuar</p>
+          </div>
+
+          {% if error %}
+          <div class="alert alert-danger">{{ error }}</div>
+          {% endif %}
+
+          <form method="post" action="{{ base_url }}/login">
+            {{ csrf_field() }}
+            <div class="mb-3">
+              <label class="form-label fw-bold">Correo Electrónico</label>
+              <div class="input-group input-group-flat shadow-sm rounded-3 overflow-hidden border">
+                <span class="input-group-text bg-white border-0"><i class="bi bi-envelope text-muted"></i></span>
+                <input type="email" name="email" class="form-control border-0" placeholder="ejemplo@correo.com" required>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-bold">Contraseña</label>
+              <div class="input-group input-group-flat shadow-sm rounded-3 overflow-hidden border">
+                <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-muted"></i></span>
+                <input type="password" name="password" class="form-control border-0" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <div class="d-grid mb-4">
+              <button type="submit" class="btn btn-primary btn-lg shadow-sm py-3 fw-bold">
+                Iniciar Sesión <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
+
+            <div class="text-center text-muted">
+              ¿No tienes una cuenta? <a href="{{ base_url }}/register" class="fw-bold text-primary">Regístrate aquí</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

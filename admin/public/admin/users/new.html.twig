@@ -1,0 +1,77 @@
+{% extends "layouts/admin.html.twig" %}
+
+{% block title %}Nuevo Usuario{% endblock %}
+{% block nav_users %}active{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+  <div>
+    <h2 class="h3 fw-bold text-indigo-900 mb-1">
+      <i class="bi bi-person-plus me-2 text-indigo-600"></i> Nuevo Usuario
+    </h2>
+    <p class="text-muted small mb-0">Crea una nueva cuenta de acceso administrativo para el equipo de trabajo.</p>
+  </div>
+  <a href="{{ base_url }}/users" class="btn btn-outline-secondary rounded-pill px-3 shadow-sm">
+    <i class="bi bi-arrow-left me-1"></i> Volver a Usuarios
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+      <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+        <span class="fw-bold text-white"><i class="bi bi-person-fill-add me-2 text-indigo-400"></i> Formulario de Alta de Usuario</span>
+        <span class="badge bg-indigo-50 text-indigo-600 rounded-pill">Campos requeridos *</span>
+      </div>
+      <div class="card-body p-4">
+        <form method="post" action="{{ base_url }}/user/create">
+          {{ csrf_field() }}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="name" class="form-label fw-semibold small text-muted">Nombre(s) <span class="text-danger">*</span></label>
+              <input type="text" name="name" class="form-control" id="name" placeholder="Nombre" required>
+            </div>
+            <div class="col-md-6">
+              <label for="lastname" class="form-label fw-semibold small text-muted">Apellidos <span class="text-danger">*</span></label>
+              <input type="text" name="lastname" required class="form-control" id="lastname" placeholder="Apellidos">
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="username" class="form-label fw-semibold small text-muted">Nombre de Usuario (Login) <span class="text-danger">*</span></label>
+              <input type="text" name="username" class="form-control" required id="username" placeholder="Ej. jperez">
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label fw-semibold small text-muted">Correo Electrónico <span class="text-danger">*</span></label>
+              <input type="email" name="email" class="form-control" id="email" placeholder="usuario@correo.com" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold small text-muted">Contraseña de Acceso <span class="text-danger">*</span></label>
+            <input type="password" required name="password" class="form-control" id="password" placeholder="Contraseña segura">
+          </div>
+
+          <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin">
+                <label class="form-check-label fw-semibold text-dark" for="is_admin">Privilegios de Administrador</label>
+                <div class="form-text small" style="font-size: 11px;">Acceso total a todos los módulos y ajustes</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-2">
+            <a href="{{ base_url }}/users" class="btn btn-light rounded-pill px-4">Cancelar</a>
+            <button type="submit" class="btn btn-indigo rounded-pill px-4 shadow-sm">
+              <i class="bi bi-check-lg me-1"></i> Registrar Usuario
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -4,14 +4,14 @@ class PersonData extends Extra {
 	public $extra_fields;
 	public $extra_fields_strings;
 
-	public $id, $name, $lastname, $email, $phone, $created_at, $address, $image;
-
 	public function __construct(){
 		$this->extra_fields = array();
 		$this->extra_fields_strings = array();
 		$this->name = "";
 		$this->lastname = "";
+		$this->username = "";
 		$this->email = "";
+		$this->password = "";
 		$this->created_at = "NOW()";
 	}
 

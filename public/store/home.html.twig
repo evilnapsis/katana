@@ -1,0 +1,61 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Tienda Online{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  {% if slides|length > 0 %}
+  <div id="carousel-katana" class="carousel slide mb-5 shadow rounded overflow-hidden" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      {% for row in slides %}
+      <button type="button" data-bs-target="#carousel-katana" data-bs-slide-to="{{ loop.index0 }}" class="{{ loop.first ? 'active' : '' }}" aria-current="{{ loop.first ? 'true' : 'false' }}"></button>
+      {% endfor %}
+    </div>
+    <div class="carousel-inner">
+      {% for row in slides %}
+      <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+        {% if row.image %}
+        <img src="{{ legacy_public_url }}/{{ row.image }}" class="d-block w-100" alt="{{ row.slide.title }}" style="height: 400px; object-fit: cover;">
+        {% endif %}
+        <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+          <h2 class="h1 text-white mb-0">{{ row.slide.title }}</h2>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-katana" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel-katana" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="page-title text-uppercase tracking-tight">
+      <i class="bi bi-star-fill text-warning me-2"></i> Productos Destacados
+    </h2>
+  </div>
+
+  {% if featureds|length > 0 %}
+  <div class="row row-cards">
+    {% for item in featureds %}
+      {% include "store/_product_card.html.twig" with {item: item, coin: coin} %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card bg-indigo-50 border-indigo-100">
+    <div class="card-body text-center py-5">
+      <div class="avatar avatar-xl bg-indigo-100 text-indigo-600 mb-3 mx-auto">
+        <i class="bi bi-info-circle fs-1"></i>
+      </div>
+      <h2 class="h3 fw-bold text-indigo-900">No hay productos destacados</h2>
+      <p class="text-indigo-600">En la página principal solo se muestran productos marcados como destacados.</p>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

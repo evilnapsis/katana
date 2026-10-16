@@ -1,0 +1,128 @@
+{% extends "layouts/store.html.twig" %}
+
+{% block title %}Confirmación de Compra{% endblock %}
+
+{% block content %}
+<div class="container-xl">
+  <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius: 16px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
+    <div class="card-body p-4 text-white">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <div class="d-flex align-items-center justify-content-center rounded-circle shadow-sm" style="width:72px; height:72px; background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.3); color: #ffffff;">
+            <i class="bi bi-shield-check" style="font-size: 2.2rem; color: #ffffff;"></i>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-inline-block px-3 py-1 rounded-pill mb-2 fw-bold" style="background-color: rgba(255, 255, 255, 0.2); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 12px; letter-spacing: 0.5px;">PASO FINAL</div>
+          <h1 class="h2 fw-bold text-white mb-1">Confirmación de Compra</h1>
+          <p class="text-white-50 mb-0 small">Revisa los artículos de tu orden y confirma el método de pago seleccionado.</p>
+        </div>
+        <div class="col-auto mt-3 mt-md-0">
+          <a href="{{ base_url }}/cart" class="btn btn-outline-light btn-sm rounded-pill px-3">
+            <i class="bi bi-arrow-left me-1"></i> Regresar al Carrito
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cards g-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+          <span class="fw-bold"><i class="bi bi-basket-fill me-2 text-indigo-400"></i> Resumen de Artículos</span>
+          <span class="badge bg-indigo-500 text-white">{{ items|length }} Producto(s)</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light text-muted small text-uppercase">
+                <tr>
+                  <th class="ps-3">Producto</th>
+                  <th class="text-center">Código</th>
+                  <th class="text-center">Cantidad</th>
+                  <th class="text-end">Precio U.</th>
+                  <th class="text-end pe-3">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in items %}
+                {% set p = item.product %}
+                <tr>
+                  <td class="ps-3">
+                    <div class="d-flex align-items-center">
+                      <img src="{{ legacy_public_url }}/{{ item.image }}" class="avatar avatar-md me-3 rounded border p-1" style="object-fit: contain; width: 48px; height: 48px;">
+                      <div class="fw-bold text-indigo-900">{{ p.name }}</div>
+                    </div>
+                  </td>
+                  <td class="text-center"><span class="badge bg-light text-dark border">{{ p.code }}</span></td>
+                  <td class="text-center fw-bold">{{ item.q }}</td>
+                  <td class="text-end text-muted">{{ coin }} {{ p.price|number_format(2) }}</td>
+                  <td class="text-end pe-3 fw-bold text-indigo-900">{{ coin }} {{ item.subtotal|number_format(2) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm mb-3" style="border-radius: 16px; overflow: hidden;">
+        <div class="card-header bg-indigo-50 border-0 py-3">
+          <span class="fw-bold text-indigo-900"><i class="bi bi-credit-card-2-front me-2 text-indigo-600"></i> Método de Pago</span>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-md bg-indigo-100 text-indigo-700 rounded-circle me-3">
+              <i class="bi bi-wallet2 fs-4"></i>
+            </div>
+            <div>
+              <div class="fw-bold text-indigo-900 h4 mb-0">{{ paymethod.name }}</div>
+              <div class="text-muted small">Seleccionado para esta transacción</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+        <div class="card-header bg-dark text-white py-3">
+          <span class="fw-bold"><i class="bi bi-calculator me-2 text-indigo-400"></i> Desglose de Totales</span>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Subtotal Bruto</span>
+            <span class="fw-bold">{{ coin }} {{ subtotal|number_format(2) }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">{{ iva_txt }} ({{ iva }}%)</span>
+            <span class="fw-bold">{{ coin }} {{ iva_amount|number_format(2) }}</span>
+          </div>
+          <hr class="my-3">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="h4 mb-0 fw-bold text-indigo-900">Total Final</span>
+            <span class="h2 mb-0 text-emerald-700 fw-bold">{{ coin }} {{ total|number_format(2) }}</span>
+          </div>
+
+          <form action="{{ base_url }}/checkout/confirm" method="post">
+            {{ csrf_field() }}
+            <input type="hidden" name="paymethod_id" value="{{ paymethod.id }}">
+            <div class="d-grid shadow-indigo-200">
+              <button type="submit" class="btn btn-lg shadow-sm py-3 text-white fw-bold" style="background:#059669; border:none; border-radius: 12px;">
+                <i class="bi bi-check-circle-fill me-2"></i> Confirmar y Finalizar Pedido
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-3 text-center">
+            <a href="{{ base_url }}/cart/clear" class="btn btn-link link-danger text-decoration-none small" onclick="return confirm('¿Deseas cancelar y vaciar la orden?')">
+              <i class="bi bi-x-circle me-1"></i> Cancelar Orden
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

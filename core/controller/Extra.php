@@ -1,6 +1,6 @@
 <?php
 
-class Extra {
+class Extra extends LbModel {
 
 	public $extra_fields;
 	public $extra_fields_strings;
